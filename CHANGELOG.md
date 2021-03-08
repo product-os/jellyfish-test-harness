@@ -4,6 +4,12 @@
 * Add integration test harness code [Graham McCulloch]
 
 # v1.0.1
+
+# v1.0.2
+## (2021-03-08)
+
+* Update Renovate config [Josh Bowling]
+
 ## (2021-03-08)
 
 * Manually bump package dependencies [Graham McCulloch]
