@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v1.1.0
+## (2021-03-09)
+
+* Update to jellyfish-sync@5.2.0 [Lucian Buzzo]
+
 # v1.0.3
 ## (2021-03-09)
 
