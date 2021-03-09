@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v1.0.4
+## (2021-03-09)
+
+* Test jellyfish-sync/pull/553 [Josh Bowling]
+
 # v1.0.3
 ## (2021-03-09)
 
