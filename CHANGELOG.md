@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v1.1.25
+## (2021-03-17)
+
+* Test jellyfish-environment/pull/175 [Josh Bowling]
+
 # v1.1.24
 ## (2021-03-16)
 
