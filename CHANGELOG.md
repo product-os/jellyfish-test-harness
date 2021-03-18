@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v1.1.28
+## (2021-03-18)
+
+* Test jellyfish-core/pull/347 [Josh Bowling]
+
 # v1.1.27
 ## (2021-03-17)
 
