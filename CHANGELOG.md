@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v1.1.54
+## (2021-03-26)
+
+* Replace husky with simple-git-hooks [Graham McCulloch]
+
 # v1.1.53
 ## (2021-03-26)
 
