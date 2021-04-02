@@ -39,8 +39,8 @@
     "@balena/jellyfish-environment": "^4.0.6",
     "@balena/jellyfish-plugin-base": "^2.0.24",
     "@balena/jellyfish-queue": "0.0.496",
-    "@balena/jellyfish-sync": "^5.2.40",
-    "@balena/jellyfish-uuid": "^1.0.80",
+    "@balena/jellyfish-sync": "^5.2.41",
+    "@balena/jellyfish-uuid": "^1.0.81",
     "@balena/jellyfish-worker": "^3.1.43",
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
@@ -67,7 +67,7 @@
     "eslint-plugin-promise": "^4.3.1",
     "jsdoc-to-markdown": "^7.0.1",
     "lint-staged": "^10.5.4",
-    "simple-git-hooks": "^2.2.0"
+    "simple-git-hooks": "^2.3.0"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
