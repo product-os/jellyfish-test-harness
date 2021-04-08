@@ -41,7 +41,7 @@
     "@balena/jellyfish-queue": "0.0.513",
     "@balena/jellyfish-sync": "^5.2.62",
     "@balena/jellyfish-uuid": "^1.0.84",
-    "@balena/jellyfish-worker": "^4.0.12",
+    "@balena/jellyfish-worker": "^4.0.13",
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "errio": "^1.2.2",
