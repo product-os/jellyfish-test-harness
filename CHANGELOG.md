@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v1.1.146
+## (2021-04-12)
+
+* Replace jellyfish-uuid [Josh Bowling]
+
 # v1.1.145
 ## (2021-04-12)
 
