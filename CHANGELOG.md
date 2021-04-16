@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v1.1.190
+## (2021-04-16)
+
+* Update to latest sync module [Lucian Buzzo]
+
 # v1.1.189
 ## (2021-04-16)
 
