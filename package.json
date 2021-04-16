@@ -39,7 +39,7 @@
     "@balena/jellyfish-environment": "^4.1.4",
     "@balena/jellyfish-plugin-base": "^2.0.78",
     "@balena/jellyfish-queue": "0.0.557",
-    "@balena/jellyfish-sync": "^6.0.13",
+    "@balena/jellyfish-sync": "^6.0.16",
     "@balena/jellyfish-worker": "^4.0.79",
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
