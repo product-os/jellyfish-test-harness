@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v2.0.2
+## (2021-04-18)
+
+* Publish docs with GitHub action [Josh Bowling]
+
 # v2.0.1
 ## (2021-04-18)
 
