@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v2.0.0
+## (2021-04-18)
+
+* Convert to TypeScript [Josh Bowling]
+
 # v1.1.206
 ## (2021-04-18)
 
