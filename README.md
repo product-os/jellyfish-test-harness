@@ -24,7 +24,7 @@ syncIntegrationScenario.run(ava, {
   after: (test) => {},
   afterEach: (test) => {},
 
-  // An optional method to be called to prepare card data before inserting it 
+  // An optional method to be called to prepare card data before inserting it
   prepareEvent: (data) => { return data },
 
   // Additional options to pass to the webhook scenario runner
@@ -60,5 +60,7 @@ syncIntegrationScenario.run(ava, {
 
 # Documentation
 
-Jellyfish Test Harness module.
+[![Publish Documentation](https://github.com/product-os/jellyfish-test-harness/actions/workflows/publish-docs.yml/badge.svg)](https://github.com/product-os/jellyfish-test-harness/actions/workflows/publish-docs.yml)
+
+Visit the website for complete documentation: https://product-os.github.io/jellyfish-test-harness
 
