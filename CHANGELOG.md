@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v2.0.35
+## (2021-04-22)
+
+* Update to typescript version of queue module [Lucian Buzzo]
+
 # v2.0.34
 ## (2021-04-22)
 
