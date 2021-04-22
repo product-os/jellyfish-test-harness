@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v2.0.32
+## (2021-04-22)
+
+* fix mixup of actual/expected in deep-equals [Martin Rauscher]
+
 # v2.0.31
 ## (2021-04-21)
 
