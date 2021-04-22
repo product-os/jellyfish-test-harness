@@ -263,11 +263,11 @@ export async function webhookScenario(
 	testCase.expected.head.slug = testCase.expected.head.slug || head.slug;
 
 	assert.deepEqual(
+		head,
 		Object.assign(
 			testCase.expected.head,
 			pick(head, ['id', 'created_at', 'updated_at', 'linked_at']),
 		),
-		head,
 	);
 
 	const tailFilter = (card: any) => {
