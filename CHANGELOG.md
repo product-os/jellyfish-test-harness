@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v2.0.47
+## (2021-04-24)
+
+* patch: Update dependency @balena/jellyfish-core to ^2.13.12 [Renovate Bot]
+
 # v2.0.46
 ## (2021-04-24)
 
