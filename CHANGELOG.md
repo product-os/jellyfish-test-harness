@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v2.0.50
+## (2021-04-25)
+
+* Add missing uuid types [Josh Bowling]
+
 # v2.0.49
 ## (2021-04-25)
 
