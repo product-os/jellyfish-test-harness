@@ -47,10 +47,10 @@
   "dependencies": {
     "@balena/jellyfish-core": "^2.13.66",
     "@balena/jellyfish-environment": "^4.1.8",
-    "@balena/jellyfish-plugin-base": "^2.1.64",
+    "@balena/jellyfish-plugin-base": "^2.1.65",
     "@balena/jellyfish-queue": "^1.0.52",
-    "@balena/jellyfish-sync": "^6.0.120",
-    "@balena/jellyfish-worker": "^4.1.73",
+    "@balena/jellyfish-sync": "^6.0.121",
+    "@balena/jellyfish-worker": "^4.2.0",
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "errio": "^1.2.2",
@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "@balena/jellycheck": "^0.1.1",
-    "@balena/jellyfish-types": "^0.5.101",
+    "@balena/jellyfish-types": "^0.5.102",
     "@balena/lint": "^5.4.2",
     "@types/bluebird": "^3.5.33",
     "@types/jest": "^26.0.23",
