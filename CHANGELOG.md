@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v2.0.131
+## (2021-05-05)
+
+* patch: Update non-major [Renovate Bot]
+
 # v2.0.130
 ## (2021-05-04)
 
