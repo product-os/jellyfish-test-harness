@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v2.0.139
+## (2021-05-05)
+
+* patch: Update dependency catch-uncommitted to v2 [Renovate Bot]
+
 # v2.0.138
 ## (2021-05-05)
 
