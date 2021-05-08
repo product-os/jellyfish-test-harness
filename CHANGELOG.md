@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v2.0.152
+## (2021-05-08)
+
+* build(deps): bump hosted-git-info from 2.8.8 to 2.8.9 [dependabot[bot]]
+
 # v2.0.151
 ## (2021-05-08)
 
