@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v2.0.173
+## (2021-05-10)
+
+* build(deps): bump postcss from 8.2.7 to 8.2.15 [dependabot[bot]]
+
 # v2.0.172
 ## (2021-05-10)
 
