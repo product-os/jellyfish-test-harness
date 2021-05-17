@@ -10,11 +10,13 @@ import { v4 as uuidv4 } from 'uuid';
 import type { SetupOptions, TestContext } from '../types';
 import { generateRandomID, generateRandomSlug } from './utils';
 
-// TS-TODO: Use import once core is converted to TypeScript
-const Backend = require('@balena/jellyfish-core/lib/backend');
-const Cache = require('@balena/jellyfish-core/lib/cache');
-const errors = require('@balena/jellyfish-core/lib/errors');
-const Kernel = require('@balena/jellyfish-core/lib/kernel');
+// TODO: Make the core easier to bootstrap!
+import {
+	Backend,
+	MemoryCache as Cache,
+	errors,
+	Kernel,
+} from '@balena/jellyfish-core';
 
 /**
  * @summary Set up backend before running tests.
@@ -33,7 +35,7 @@ async function backendBefore(
 	context.cache = new Cache(
 		Object.assign({}, defaultEnvironment.redis, {
 			namespace: dbName,
-		}),
+		} as any),
 	);
 
 	context.context = {
