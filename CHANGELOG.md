@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v2.0.245
+## (2021-05-25)
+
+* build(deps): bump browserslist from 4.16.4 to 4.16.6 [dependabot[bot]]
+
 # v2.0.244
 ## (2021-05-25)
 
