@@ -160,7 +160,7 @@ export async function webhookScenario(
 			return callback(null, [code, content]);
 		});
 
-	const cards = [];
+	const cards: any[] = [];
 	for (const step of testCase.steps) {
 		webhookOffset = Math.max(
 			webhookOffset,
