@@ -5,6 +5,12 @@
 
 # v1.0.1
 
+# v2.0.249
+## (2021-05-25)
+
+* Fix build errors [Josh Bowling]
+* Use jellyfish-config [Josh Bowling]
+
 # v2.0.248
 ## (2021-05-25)
 
