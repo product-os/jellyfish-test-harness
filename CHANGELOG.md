@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v3.0.2
+## (2021-05-27)
+
+* 🔄 Synced file(s) with product-os/jellyfish-config [jellyfish-bot]
+
 # v3.0.1
 ## (2021-05-27)
 
