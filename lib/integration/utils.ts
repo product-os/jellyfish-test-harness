@@ -5,13 +5,13 @@
 
 // tslint:disable: no-var-requires
 
+import { cardMixins as coreMixins } from '@balena/jellyfish-core';
 import { PluginManager } from '@balena/jellyfish-plugin-base';
 import type { JellyfishPluginConstructor } from '@balena/jellyfish-plugin-base';
 import { v4 as uuidv4 } from 'uuid';
 import type { TestContext } from '../types';
 
 const combinatorics = require('js-combinatorics/commonjs/combinatorics');
-const coreMixins = require('@balena/jellyfish-core/lib/cards/mixins');
 
 /**
  * @summary Load Jellyfish plugins.
