@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v3.0.8
+## (2021-05-27)
+
+* test worker changes [Martin Rauscher]
+
 # v3.0.7
 ## (2021-05-27)
 
