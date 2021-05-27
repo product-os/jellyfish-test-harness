@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v3.0.0
+## (2021-05-27)
+
+* Update to typescript version of core [Lucian Buzzo]
+
 # v2.0.257
 ## (2021-05-27)
 
