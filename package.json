@@ -47,10 +47,10 @@
   "dependencies": {
     "@balena/jellyfish-core": "^3.0.3",
     "@balena/jellyfish-environment": "^4.1.27",
-    "@balena/jellyfish-plugin-base": "^2.1.118",
+    "@balena/jellyfish-plugin-base": "^2.1.119",
     "@balena/jellyfish-queue": "^1.0.117",
     "@balena/jellyfish-sync": "^6.0.200",
-    "@balena/jellyfish-worker": "^4.4.56",
+    "@balena/jellyfish-worker": "^4.4.58",
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "errio": "^1.2.2",
