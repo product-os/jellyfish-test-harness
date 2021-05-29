@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v3.0.26
+## (2021-05-29)
+
+* patch: Update dependency jest to ^27.0.3 [Renovate Bot]
+
 # v3.0.25
 ## (2021-05-29)
 
