@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v3.0.14
+## (2021-05-29)
+
+* build(deps): bump ws from 7.4.4 to 7.4.6 [dependabot[bot]]
+
 # v3.0.13
 ## (2021-05-29)
 
