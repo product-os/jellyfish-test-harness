@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v3.0.13
+## (2021-05-29)
+
+* patch: Update external-major to v27 [Renovate Bot]
+
 # v3.0.12
 ## (2021-05-29)
 
