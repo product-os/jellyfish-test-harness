@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v3.0.37
+## (2021-06-03)
+
+* Remove unnecessary catch-uncommitted [Josh Bowling]
+
 # v3.0.36
 ## (2021-05-31)
 
