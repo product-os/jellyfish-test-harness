@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v3.0.38
+## (2021-06-04)
+
+* Improve lint-staged config [Josh Bowling]
+
 # v3.0.37
 ## (2021-06-03)
 
