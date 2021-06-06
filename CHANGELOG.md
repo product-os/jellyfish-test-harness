@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v3.0.47
+## (2021-06-06)
+
+* Bump jellyfish-queue to v1.0.133 [Josh Bowling]
+
 # v3.0.46
 ## (2021-06-06)
 
