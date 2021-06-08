@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v3.0.69
+## (2021-06-08)
+
+* patch: Update dependency @balena/jellyfish-config to ^1.3.0 [Renovate Bot]
+
 # v3.0.68
 ## (2021-06-08)
 
