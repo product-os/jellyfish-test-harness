@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v3.0.74
+## (2021-06-09)
+
+* build(deps): bump glob-parent from 5.1.1 to 5.1.2 [dependabot[bot]]
+
 # v3.0.73
 ## (2021-06-09)
 
