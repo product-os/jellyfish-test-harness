@@ -44,10 +44,10 @@
   "author": "Balena.io. <hello@balena.io>",
   "license": "UNLICENSED",
   "dependencies": {
-    "@balena/jellyfish-core": "^3.1.9",
+    "@balena/jellyfish-core": "^3.1.10",
     "@balena/jellyfish-environment": "^4.2.3",
     "@balena/jellyfish-plugin-base": "^2.1.151",
-    "@balena/jellyfish-queue": "^1.0.151",
+    "@balena/jellyfish-queue": "^1.0.152",
     "@balena/jellyfish-sync": "^6.0.236",
     "@balena/jellyfish-worker": "^5.0.31",
     "bluebird": "^3.7.2",
