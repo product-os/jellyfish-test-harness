@@ -5,6 +5,12 @@
 
 # v1.0.1
 
+# v3.0.100
+## (2021-06-15)
+
+* Drop versioned_slug column in backup table [Graham McCulloch]
+* Test new generated versioned_slug field [Graham McCulloch]
+
 # v3.0.99
 ## (2021-06-15)
 
