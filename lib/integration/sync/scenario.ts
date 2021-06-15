@@ -491,9 +491,10 @@ export async function restore(context: TestContext): Promise<void> {
  * @param context - test context
  */
 export async function save(context: TestContext): Promise<void> {
-	await context.jellyfish.backend.connection.any(
-		'CREATE TABLE cards_copy AS TABLE cards',
-	);
+	await context.jellyfish.backend.connection.any(`
+		CREATE TABLE cards_copy AS TABLE cards;
+		ALTER TABLE cards_copy DROP COLUMN versioned_slug;
+	`);
 }
 
 /**
