@@ -46,7 +46,7 @@
   "dependencies": {
     "@balena/jellyfish-core": "^3.1.17",
     "@balena/jellyfish-environment": "^4.2.5",
-    "@balena/jellyfish-plugin-base": "^2.1.154",
+    "@balena/jellyfish-plugin-base": "3.0.0-integration-types-badeb7294b8ef0853790c4cc9cb9c88d8764df86",
     "@balena/jellyfish-queue": "^1.0.160",
     "@balena/jellyfish-sync": "^6.0.240",
     "@balena/jellyfish-worker": "^5.0.39",
