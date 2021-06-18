@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v3.0.105
+## (2021-06-18)
+
+* Update plugin-base dependency [Graham McCulloch]
+
 # v3.0.104
 ## (2021-06-16)
 
