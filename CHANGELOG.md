@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v3.0.116
+## (2021-06-19)
+
+* patch: Update dependency @balena/jellyfish-sync to ^6.0.246 [Renovate Bot]
+
 # v3.0.115
 ## (2021-06-19)
 
