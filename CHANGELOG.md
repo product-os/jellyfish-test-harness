@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v4.0.0
+## (2021-06-24)
+
+* Remove TestSuite integration parameter [Josh Bowling]
+
 # v3.0.130
 ## (2021-06-24)
 
