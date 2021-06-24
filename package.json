@@ -45,7 +45,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@balena/jellyfish-core": "^4.0.0",
-    "@balena/jellyfish-environment": "^4.2.8",
+    "@balena/jellyfish-environment": "^4.3.0",
     "@balena/jellyfish-plugin-base": "^2.1.164",
     "@balena/jellyfish-queue": "^1.0.178",
     "@balena/jellyfish-sync": "^6.0.256",
