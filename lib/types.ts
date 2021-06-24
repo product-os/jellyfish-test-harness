@@ -34,7 +34,6 @@ export interface TestSuite {
 	basePath: string;
 	plugins: any[];
 	cards: string[];
-	integration: any;
 	scenarios: {
 		[key: string]: {
 			expected: any;
