@@ -509,7 +509,6 @@ function getTestCaseOptions(
 	suite: TestSuite,
 ): TestCaseOptions {
 	return {
-		constructor: suite.integration,
 		source: suite.source,
 		options: Object.assign(
 			{
