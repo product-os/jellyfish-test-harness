@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v4.0.1
+## (2021-06-24)
+
+* Bump jellyfish-core dependency [Graham McCulloch]
+
 # v4.0.0
 ## (2021-06-24)
 
