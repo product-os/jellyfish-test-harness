@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v4.0.18
+## (2021-06-26)
+
+* patch: Update external-non-major [Renovate Bot]
+
 # v4.0.17
 ## (2021-06-25)
 
