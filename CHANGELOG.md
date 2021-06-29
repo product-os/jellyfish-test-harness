@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v4.0.24
+## (2021-06-29)
+
+* Allow baseUrl to be a RegExp [Josh Bowling]
+
 # v4.0.23
 ## (2021-06-27)
 
