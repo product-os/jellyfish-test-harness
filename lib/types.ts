@@ -41,7 +41,7 @@ export interface TestSuite {
 			headIndex?: number;
 		};
 	};
-	baseUrl: string;
+	baseUrl: string | RegExp;
 	stubRegex: object;
 	source: string;
 	isAuthorized: any;
