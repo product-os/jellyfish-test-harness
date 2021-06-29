@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v5.0.0
+## (2021-06-29)
+
+* Update to latest worker that always re-enqueues requests from triggers [Lucian Buzzo]
+
 # v4.0.26
 ## (2021-06-29)
 
