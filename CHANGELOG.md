@@ -5,6 +5,12 @@
 
 # v1.0.1
 
+# v4.0.25
+## (2021-06-29)
+
+* Bump node engines specification [Josh Bowling]
+* Remove package-lock.json [Josh Bowling]
+
 # v4.0.24
 ## (2021-06-29)
 
