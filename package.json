@@ -6,7 +6,7 @@
     "url": "https://github.com/product-os/jellyfish-test-harness.git"
   },
   "engines": {
-    "node": ">=12.15.0"
+    "node": ">=14.2.0"
   },
   "description": "Test harness helpers for Jellyfish repos",
   "main": "build/index.js",
