@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v5.0.3
+## (2021-06-29)
+
+* Remove package-lock.json [Josh Bowling]
+
 # v5.0.2
 ## (2021-06-29)
 
