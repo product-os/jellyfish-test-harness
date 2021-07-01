@@ -567,6 +567,7 @@ export async function run(tester: Tester, suite: TestSuite): Promise<void> {
 	};
 
 	for (const testCaseName of Object.keys(suite.scenarios)) {
+		console.log(`[Test Case Name]: ${testCaseName}`);
 		const testCase = suite.scenarios[testCaseName];
 		const expected = {
 			head: testCase.expected.head,
@@ -576,6 +577,8 @@ export async function run(tester: Tester, suite: TestSuite): Promise<void> {
 		for (const variation of getVariations(testCase.steps, {
 			permutations: suite.source !== 'github' && suite.source !== 'flowdock',
 		})) {
+			console.log(`[Test Case Variation]: ${variation}`);
+
 			// TODO: We should remove this check
 			if (
 				(suite.source === 'github' || suite.source === 'flowdock') &&
