@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v5.0.10
+## (2021-07-01)
+
+* Add testcase name log [Josh Bowling]
+
 # v5.0.9
 ## (2021-07-01)
 
