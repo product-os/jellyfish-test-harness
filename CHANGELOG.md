@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v5.1.1
+## (2021-07-02)
+
+* Call flushAll() in scenario [Josh Bowling]
+
 # v5.1.0
 ## (2021-07-02)
 
