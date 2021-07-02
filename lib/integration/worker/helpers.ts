@@ -165,13 +165,24 @@ export const worker = {
 			}
 		};
 
+		context.flushAll = async (ssn: string) => {
+			try {
+				while (true) {
+					await context.flush(ssn);
+				}
+			} catch {
+				// Once an error is thrown, there are no more requests to dequeue
+				return;
+			}
+		};
+
 		context.processAction = async (session: string, action: ActionRequest) => {
 			const createRequest = await context.queue.producer.enqueue(
 				context.worker.getId(),
 				session,
 				action,
 			);
-			await context.flush(session);
+			await context.flushAll(session);
 			return context.queue.producer.waitResults(context, createRequest);
 		};
 	},
