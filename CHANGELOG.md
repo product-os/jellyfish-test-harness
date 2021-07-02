@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v5.1.0
+## (2021-07-02)
+
+* Add and use flushAll function [Josh Bowling]
+
 # v5.0.9
 ## (2021-07-01)
 
