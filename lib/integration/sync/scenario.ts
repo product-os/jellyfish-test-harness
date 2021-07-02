@@ -103,7 +103,11 @@ function getVariations(sequence: any, options: any): Variation[] {
  */
 function requireStub(basePath: string, offset: any, name: string): any {
 	if (offset === 0) {
-		console.warn(`Stub not found: ${name}`);
+		console.warn(
+			'Stub not found (possibly to simulate a 404):',
+			`\n\tName: ${name}`,
+			`\n\tBase Path: ${basePath}`,
+		);
 		return null;
 	}
 
