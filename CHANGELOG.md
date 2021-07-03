@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v5.1.17
+## (2021-07-03)
+
+* Improve stub not found warning message [Josh Bowling]
+
 # v5.1.16
 ## (2021-07-03)
 
