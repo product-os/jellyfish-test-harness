@@ -54,7 +54,7 @@
     "body-parser": "^1.19.0",
     "errio": "^1.2.2",
     "express": "^4.17.1",
-    "js-combinatorics": "^1.5.1",
+    "js-combinatorics": "^1.5.3",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",
     "nock": "^13.1.0",
