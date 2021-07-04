@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v5.1.19
+## (2021-07-04)
+
+* patch: Update dependency js-combinatorics to ^1.5.1 [Renovate Bot]
+
 # v5.1.18
 ## (2021-07-04)
 
