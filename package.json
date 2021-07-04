@@ -49,7 +49,7 @@
     "@balena/jellyfish-plugin-base": "^2.1.183",
     "@balena/jellyfish-queue": "^1.0.202",
     "@balena/jellyfish-sync": "^6.0.275",
-    "@balena/jellyfish-worker": "^7.0.16",
+    "@balena/jellyfish-worker": "^7.0.17",
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "errio": "^1.2.2",
