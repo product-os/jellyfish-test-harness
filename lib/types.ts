@@ -51,7 +51,7 @@ export interface TestSuite {
 	after?: (context: TestContext) => void;
 	afterEach?: (context: TestContext) => void;
 	pre?: (context: TestContext) => void;
-	prepareEvent?: () => void;
+	prepareEvent?: (event: any) => Promise<any>;
 }
 
 export interface TestCaseOptions {

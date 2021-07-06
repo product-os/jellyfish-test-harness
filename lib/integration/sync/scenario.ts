@@ -588,8 +588,8 @@ export async function run(tester: Tester, suite: TestSuite): Promise<void> {
 				continue;
 			}
 
-			const prepareEventNoop = async (data: any) => {
-				return data;
+			const prepareEventNoop = async (event: any): Promise<any> => {
+				return event;
 			};
 
 			tester.test(`(${variation.name}) ${testCaseName}`, async () => {
