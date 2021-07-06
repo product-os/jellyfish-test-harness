@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v6.0.0
+## (2021-07-06)
+
+* Update prepareEvent return value type [Josh Bowling]
+
 # v5.1.36
 ## (2021-07-06)
 
