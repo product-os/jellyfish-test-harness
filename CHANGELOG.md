@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v5.1.34
+## (2021-07-06)
+
+* Remove whitesource config [Josh Bowling]
+
 # v5.1.33
 ## (2021-07-05)
 
