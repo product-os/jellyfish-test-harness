@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v5.1.36
+## (2021-07-06)
+
+* patch: Update dependency @balena/jellyfish-worker to ^7.0.24 [Renovate Bot]
+
 # v5.1.35
 ## (2021-07-06)
 
