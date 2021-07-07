@@ -60,6 +60,8 @@ syncIntegrationScenario.run(ava, {
 
 # Documentation
 
+[**Writing translate tests**](https://github.com/product-os/jellyfish-test-harness/blob/master/doc/writing-translate-tests.markdown)
+
 [![Publish Documentation](https://github.com/product-os/jellyfish-test-harness/actions/workflows/publish-docs.yml/badge.svg)](https://github.com/product-os/jellyfish-test-harness/actions/workflows/publish-docs.yml)
 
 Visit the website for complete documentation: https://product-os.github.io/jellyfish-test-harness
