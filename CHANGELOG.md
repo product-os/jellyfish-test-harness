@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v6.0.5
+## (2021-07-07)
+
+* Update usage example in README [Josh Bowling]
+
 # v6.0.4
 ## (2021-07-07)
 
