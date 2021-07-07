@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v6.0.4
+## (2021-07-07)
+
+* Add translate test howto doc [Josh Bowling]
+
 # v6.0.3
 ## (2021-07-07)
 
