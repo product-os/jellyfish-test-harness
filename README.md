@@ -8,54 +8,60 @@ Below are examples on how to use this library:
 
 ## Sync integration translate tests
 
+Below is an overview of how to call the scenario runner to execute translate tests.
+Real world examples can be found in many Jellyfish plugins as well.
+
 ```js
-const ava = require('ava')
-const {
-	syncIntegrationScenario
-} = require('@balena/jellyfish-test-harness')
+import { syncIntegrationScenario } from '@balena/jellyfish-test-harness';
+import webhooks from './webhooks/my-integration-name';
 
-syncIntegrationScenario.run(ava, {
-  // The directory in which your sync integration test and webhooks directory are located
-  basePath: '',
+syncIntegrationScenario.run(
+  {
+    test,
+    before: beforeAll,
+    beforeEach,
+    after: afterAll,
+    afterEach,
+  }, {
+    // The directory in which your sync integration test and webhooks directory are located
+    basePath: __dirname,
 
-  // Optional additional test hooks
-  before: (test) => {},
-  beforeEach: (test) => {},
-  after: (test) => {},
-  afterEach: (test) => {},
+    // Optional additional test hooks
+    before: (test) => {},
+    beforeEach: (test) => {},
+    after: (test) => {},
+    afterEach: (test) => {},
 
-  // An optional method to be called to prepare card data before inserting it
-  prepareEvent: (data) => { return data },
+    // An optional method to be called to prepare card data before inserting it
+    prepareEvent: (event: any) => { return event },
 
-  // Additional options to pass to the webhook scenario runner
-  options: {},
+    // Additional options to pass to the webhook scenario runner
+    options: {},
 
-  // A list of plugin classes required to run the tests
-  plugins: [],
+    // A list of plugin classes required to run the tests
+    plugins: [],
 
-  // A list of card slugs that must be loaded before running any tests
-	cards: [ ... ],
+    // A list of card slugs that must be loaded before running any tests
+    cards: [ ... ],
 
-  // The sync integration code itself
-	integration: require('../../../lib/integrations/<my-integration>'),
+    // The scenarios that will be run
+    scenarios: webhooks,
 
-  // The scenarios that will be run
-	scenarios: require('./webhooks/<my-integration>'),
+    // The URL of the integration
+    baseUrl: 'https://<my-integration-endpoint>',
 
-  // The URL of the integration
-	baseUrl: 'https://<my-integration-endpoint>',
+    // The regular expression picking paths on the baseUrl to provide mock responses to
+    stubRegex: /.*/,
 
-  // The regular expression picking paths on the baseUrl to provide mock responses to
-	stubRegex: /.*/,
+    // The slug of the integration under test
+    source: '<my-integration>',
 
-  // The slug of the integration under test
-	source: '<my-integration>',
-
-  // A callback to verify if a request is authorized
-	isAuthorized: (request) => {
-		...
-	}
-})
+    // A callback to verify if a request is authorized
+    isAuthorized: (request) => {
+      ...
+    },
+  },
+);
 ```
 
 # Documentation
