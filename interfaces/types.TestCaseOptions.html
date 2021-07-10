@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Variation | @balena/jellyfish-test-harness</title>
+	<title>TestCaseOptions | @balena/jellyfish-test-harness</title>
 	<meta name="description" content="Documentation for @balena/jellyfish-test-harness">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,10 +58,10 @@
 					<a href="../modules/types.html">types</a>
 				</li>
 				<li>
-					<a href="types.variation.html">Variation</a>
+					<a href="types.TestCaseOptions.html">TestCaseOptions</a>
 				</li>
 			</ul>
-			<h1>Interface Variation</h1>
+			<h1>Interface TestCaseOptions</h1>
 		</div>
 	</div>
 </header>
@@ -72,7 +72,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Variation</span>
+						<span class="target">TestCaseOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -83,8 +83,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.variation.html#combination" class="tsd-kind-icon">combination</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.variation.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.TestCaseOptions.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.TestCaseOptions.html#options" class="tsd-kind-icon">options</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.TestCaseOptions.html#source" class="tsd-kind-icon">source</a></li>
 							</ul>
 						</section>
 					</div>
@@ -93,22 +94,40 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="combination" class="tsd-anchor"></a>
-					<h3>combination</h3>
-					<div class="tsd-signature tsd-kind-icon">combination<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></div>
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<div class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/product-os/jellyfish-test-harness/blob/d8e45d5/lib/types.ts#L22">types.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/product-os/jellyfish-test-harness/blob/cd1cd16/lib/types.ts#L58">types.ts:58</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="name" class="tsd-anchor"></a>
-					<h3>name</h3>
-					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="options" class="tsd-anchor"></a>
+					<h3>options</h3>
+					<div class="tsd-signature tsd-kind-icon">options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>context<span class="tsd-signature-symbol">: </span><a href="types.TestContext.html" class="tsd-signature-type" data-tsd-kind="Interface">TestContext</a><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/product-os/jellyfish-test-harness/blob/d8e45d5/lib/types.ts#L21">types.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/product-os/jellyfish-test-harness/blob/cd1cd16/lib/types.ts#L60">types.ts:60</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5>context<span class="tsd-signature-symbol">: </span><a href="types.TestContext.html" class="tsd-signature-type" data-tsd-kind="Interface">TestContext</a></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="source" class="tsd-anchor"></a>
+					<h3>source</h3>
+					<div class="tsd-signature tsd-kind-icon">source<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/product-os/jellyfish-test-harness/blob/cd1cd16/lib/types.ts#L59">types.ts:59</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -146,38 +165,41 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="types.actionrequest.html" class="tsd-kind-icon">Action<wbr>Request</a>
+						<a href="types.ActionRequest.html" class="tsd-kind-icon">Action<wbr>Request</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="types.setupoptions.html" class="tsd-kind-icon">Setup<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="types.testcaseoptions.html" class="tsd-kind-icon">Test<wbr>Case<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="types.testcontext.html" class="tsd-kind-icon">Test<wbr>Context</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="types.testsuite.html" class="tsd-kind-icon">Test<wbr>Suite</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="types.tester.html" class="tsd-kind-icon">Tester</a>
+						<a href="types.SetupOptions.html" class="tsd-kind-icon">Setup<wbr>Options</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="types.variation.html" class="tsd-kind-icon">Variation</a>
+						<a href="types.TestCaseOptions.html" class="tsd-kind-icon">Test<wbr>Case<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="types.variation.html#combination" class="tsd-kind-icon">combination</a>
+								<a href="types.TestCaseOptions.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="types.variation.html#name" class="tsd-kind-icon">name</a>
+								<a href="types.TestCaseOptions.html#options" class="tsd-kind-icon">options</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="types.TestCaseOptions.html#source" class="tsd-kind-icon">source</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="types.TestContext.html" class="tsd-kind-icon">Test<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="types.TestSuite.html" class="tsd-kind-icon">Test<wbr>Suite</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="types.Tester.html" class="tsd-kind-icon">Tester</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="types.Variation.html" class="tsd-kind-icon">Variation</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
