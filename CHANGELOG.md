@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v6.0.33
+## (2021-07-14)
+
+* Fix jest config [Graham McCulloch]
+
 # v6.0.32
 ## (2021-07-13)
 
