@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v6.0.46
+## (2021-07-28)
+
+* Update jellyfish-worker dependency [Graham McCulloch]
+
 # v6.0.45
 ## (2021-07-27)
 
