@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v6.0.62
+## (2021-08-04)
+
+* Use balena convention for npm script names [Josh Bowling]
+
 # v6.0.61
 ## (2021-08-02)
 
