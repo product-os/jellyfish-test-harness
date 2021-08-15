@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v6.0.91
+## (2021-08-15)
+
+* patch: Update dependency @types/jest to v27 [Renovate Bot]
+
 # v6.0.90
 ## (2021-08-11)
 
