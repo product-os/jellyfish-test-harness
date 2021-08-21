@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v6.1.0
+## (2021-08-21)
+
+* Add option to ignore fields on head assert [Josh Bowling]
+
 # v6.0.96
 ## (2021-08-16)
 
