@@ -22,6 +22,7 @@ import kebabCase from 'lodash/kebabCase';
 import keys from 'lodash/keys';
 import last from 'lodash/last';
 import map from 'lodash/map';
+import merge from 'lodash/merge';
 import partial from 'lodash/partial';
 import pick from 'lodash/pick';
 import sortBy from 'lodash/sortBy';
@@ -266,13 +267,22 @@ export async function webhookScenario(
 
 	testCase.expected.head.slug = testCase.expected.head.slug || head.slug;
 
-	assert.deepEqual(
-		head,
-		Object.assign(
-			testCase.expected.head,
-			pick(head, ['id', 'created_at', 'updated_at', 'linked_at']),
-		),
+	let expectedHead = Object.assign(
+		{},
+		testCase.expected.head,
+		pick(head, ['id', 'created_at', 'updated_at', 'linked_at']),
 	);
+
+	// Pick and merge any other fields explicitly marked to ignore
+	// This should be used rarely, usually for unpredictable evaluated field values
+	const headType = head.type.split('@')[0];
+	if (integration.options?.head?.ignore[headType]) {
+		expectedHead = merge(
+			expectedHead,
+			pick(head, integration.options.head.ignore[headType]),
+		);
+	}
+	assert.deepEqual(head, expectedHead);
 
 	const tailFilter = (card: any) => {
 		const baseType = card.type.split('@')[0];
