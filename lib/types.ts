@@ -45,7 +45,14 @@ export interface TestSuite {
 	stubRegex: object;
 	source: string;
 	isAuthorized: any;
-	options?: any;
+	options?: {
+		token?: any;
+		head?: {
+			ignore: {
+				[key: string]: string[];
+			};
+		};
+	};
 	before?: (context: TestContext) => void;
 	beforeEach?: (context: TestContext) => void;
 	after?: (context: TestContext) => void;
