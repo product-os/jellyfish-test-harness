@@ -3,6 +3,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential.
  */
+import { Action } from '@balena/jellyfish-types/build/worker';
 
 export interface TestContext {
 	[key: string]: any;
@@ -67,4 +68,8 @@ export interface TestCaseOptions {
 	options: {
 		context: TestContext;
 	};
+}
+
+export interface ActionLibrary {
+	[key: string]: Action;
 }
