@@ -5,6 +5,12 @@
 
 # v1.0.1
 
+# v6.1.1
+## (2021-09-04)
+
+* Give error any type [Josh Bowling]
+* Delete from the new `links2` table on reset [Carol Schulze]
+
 # v6.1.0
 ## (2021-08-21)
 
