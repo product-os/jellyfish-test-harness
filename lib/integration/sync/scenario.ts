@@ -115,7 +115,7 @@ function requireStub(basePath: string, offset: any, name: string): any {
 	const stubPath = path.join(basePath, `${offset}`, `${name}.json`);
 	try {
 		return require(stubPath);
-	} catch (error) {
+	} catch (error: any) {
 		if (error.code === 'MODULE_NOT_FOUND') {
 			return requireStub(basePath, offset - 1, name);
 		}
@@ -492,6 +492,7 @@ export async function afterEach(context: TestContext): Promise<void> {
  */
 export async function restore(context: TestContext): Promise<void> {
 	await context.jellyfish.backend.connection.any('DELETE FROM links');
+	await context.jellyfish.backend.connection.any('DELETE FROM links2');
 	await context.jellyfish.backend.connection.any('DELETE FROM cards');
 	await context.jellyfish.backend.connection.any(
 		'INSERT INTO cards SELECT * FROM cards_copy',
