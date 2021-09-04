@@ -115,7 +115,7 @@ function requireStub(basePath: string, offset: any, name: string): any {
 	const stubPath = path.join(basePath, `${offset}`, `${name}.json`);
 	try {
 		return require(stubPath);
-	} catch (error) {
+	} catch (error: any) {
 		if (error.code === 'MODULE_NOT_FOUND') {
 			return requireStub(basePath, offset - 1, name);
 		}
