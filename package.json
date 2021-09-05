@@ -1,6 +1,6 @@
 {
   "name": "@balena/jellyfish-test-harness",
-  "version": "6.1.8",
+  "version": "6.1.9",
   "repository": {
     "type": "git",
     "url": "https://github.com/product-os/jellyfish-test-harness.git"
@@ -84,6 +84,6 @@
     "pre-commit": "npx lint-staged"
   },
   "versionist": {
-    "publishedAt": "2021-09-04T15:36:21.110Z"
+    "publishedAt": "2021-09-04T15:46:30.953Z"
   }
 }
