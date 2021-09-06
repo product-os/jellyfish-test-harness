@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v6.2.0
+## (2021-09-06)
+
+* Add better integration helpers [Josh Bowling]
+
 # v6.1.14
 ## (2021-09-05)
 
