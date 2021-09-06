@@ -4,7 +4,7 @@
  * Proprietary and confidential.
  */
 
-// tslint:disable: no-var-requires
+// TODO: Remove in favor of helpers.ts
 import { defaultEnvironment } from '@balena/jellyfish-environment';
 import { v4 as uuidv4 } from 'uuid';
 import type { SetupOptions, TestContext } from '../types';
