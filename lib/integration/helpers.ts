@@ -164,13 +164,28 @@ export const before = async (
 		WorkerCards['triggered-action'],
 		allCards['role-user-community'],
 		allCards.message,
+		// Make sure any loop contracts are initialized, as they can be a prerequisite
+		..._.filter(allCards, (card) => {
+			return card.slug.startsWith('loop-');
+		}),
 		..._.filter(allCards, (card) => {
 			return card.slug.startsWith('action-');
 		}),
 	];
+
+	// Any remaining contracts from plugins can now be added to the sequence
+	const remainder = _.filter(allCards, (card) => {
+		return !_.find(bootstrapContracts, { slug: card.slug });
+	});
+
+	for (const card of remainder) {
+		bootstrapContracts.push(card);
+	}
+
 	for (const card of cards) {
 		bootstrapContracts.push(card);
 	}
+
 	for (const contract of bootstrapContracts) {
 		await jellyfish.insertCard(context, adminSessionToken, contract);
 	}
