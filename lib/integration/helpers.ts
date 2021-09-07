@@ -40,38 +40,6 @@ const pluginContext = {
 	id: 'jellyfish-worker-integration-test',
 };
 
-export const loadDefaultCards = (pluginManager: PluginManager) => {
-	const allCards = pluginManager.getCards(pluginContext, cardMixins);
-	allCards['action-test-originator'] = Object.assign(
-		{},
-		allCards['action-create-card'],
-		{
-			slug: 'action-test-originator',
-		},
-	);
-	return allCards;
-};
-
-const loadActions = (pluginManager: PluginManager) => {
-	const allActions = pluginManager.getActions(pluginContext);
-	Object.assign(allActions, {
-		'action-test-originator': {
-			handler: async (session: string, ctx: any, card: any, request: any) => {
-				request.arguments.properties.data =
-					request.arguments.properties.data || {};
-				request.arguments.properties.data.originator = request.originator;
-				return allActions['action-create-card'].handler(
-					session,
-					ctx,
-					card,
-					request,
-				);
-			},
-		},
-	});
-	return allActions;
-};
-
 const generateRandomID = (): string => {
 	return uuid();
 };
@@ -168,8 +136,8 @@ export const before = async (
 	const jellyfish = new Kernel(backend);
 	await jellyfish.initialize(context);
 
-	const allCards = loadDefaultCards(pluginManager);
-	const actionLibrary = loadActions(pluginManager);
+	const allCards = pluginManager.getCards(pluginContext, cardMixins);
+	const actionLibrary = pluginManager.getActions(pluginContext);
 
 	const adminSessionToken = jellyfish.sessions!.admin;
 
