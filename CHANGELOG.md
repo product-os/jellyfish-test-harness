@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v6.2.6
+## (2021-09-07)
+
+* Remove action stub from integration helper bootstrap [Lucian Buzzo]
+
 # v6.2.5
 ## (2021-09-06)
 
