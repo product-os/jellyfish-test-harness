@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v6.3.0
+## (2021-09-08)
+
+* Add sync to integration helper context [Josh Bowling]
+
 # v6.2.8
 ## (2021-09-07)
 
