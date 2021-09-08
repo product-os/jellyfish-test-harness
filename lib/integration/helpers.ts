@@ -35,6 +35,7 @@ import { PluginManager } from '@balena/jellyfish-plugin-base';
 import { Kernel as CoreKernel } from '@balena/jellyfish-core/build/kernel';
 import { ActionLibrary as IActionLibrary } from '../../lib/types';
 import { Worker, CARDS as WorkerCards } from '@balena/jellyfish-worker';
+import { Sync } from '@balena/jellyfish-sync';
 
 const pluginContext = {
 	id: 'jellyfish-worker-integration-test',
@@ -104,7 +105,7 @@ export const before = async (
 	const suffix = options.suffix || uuidv4();
 	const dbName = `test_${suffix.replace(/-/g, '_')}`;
 
-	const context = {
+	const context: any = {
 		id: `CORE-TEST-${uuidv4()}`,
 	};
 
@@ -135,6 +136,11 @@ export const before = async (
 
 	const jellyfish = new Kernel(backend);
 	await jellyfish.initialize(context);
+
+	const integrations = pluginManager.getSyncIntegrations(context) as any;
+	context.sync = new Sync({
+		integrations,
+	});
 
 	const allCards = pluginManager.getCards(pluginContext, cardMixins);
 	const actionLibrary = pluginManager.getActions(pluginContext);
