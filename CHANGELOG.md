@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v6.3.1
+## (2021-09-09)
+
+* Change context used to get integrations [Josh Bowling]
+
 # v6.3.0
 ## (2021-09-08)
 
