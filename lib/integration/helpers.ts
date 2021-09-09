@@ -137,7 +137,7 @@ export const before = async (
 	const jellyfish = new Kernel(backend);
 	await jellyfish.initialize(context);
 
-	const integrations = pluginManager.getSyncIntegrations(context) as any;
+	const integrations = pluginManager.getSyncIntegrations(pluginContext) as any;
 	context.sync = new Sync({
 		integrations,
 	});
