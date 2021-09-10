@@ -491,7 +491,6 @@ export async function afterEach(context: TestContext): Promise<void> {
  * @param context - test context
  */
 export async function restore(context: TestContext): Promise<void> {
-	await context.jellyfish.backend.connection.any('DELETE FROM links');
 	await context.jellyfish.backend.connection.any('DELETE FROM links2');
 	await context.jellyfish.backend.connection.any('DELETE FROM cards');
 	await context.jellyfish.backend.connection.any(
