@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v7.0.0
+## (2021-09-10)
+
+* Do not delete from the `links` table, as we are dropping that [Carol Schulze]
+
 # v6.3.3
 ## (2021-09-10)
 
