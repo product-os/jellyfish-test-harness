@@ -36,6 +36,7 @@ import { Kernel as CoreKernel } from '@balena/jellyfish-core/build/kernel';
 import { ActionLibrary as IActionLibrary } from '../../lib/types';
 import { Worker, CARDS as WorkerCards } from '@balena/jellyfish-worker';
 import { Sync } from '@balena/jellyfish-sync';
+import randomWords from 'random-words';
 
 const pluginContext = {
 	id: 'jellyfish-worker-integration-test',
@@ -86,6 +87,35 @@ export interface IntegrationTestContext {
 	generateRandomSlug: typeof generateRandomSlug;
 	generateRandomID: typeof generateRandomID;
 	actionLibrary: IActionLibrary;
+	generateRandomWords: (amount: number) => string;
+	createUser: (
+		username: string,
+	) => Promise<{ contract: UserContract; session: string }>;
+	createEvent: (
+		actor: string,
+		session: string,
+		target: Contract,
+		body: string,
+		type: 'message' | 'whisper',
+	) => Promise<Contract>;
+	createMessage: (
+		actor: string,
+		session: string,
+		target: Contract,
+		body: string,
+	) => Promise<Contract>;
+	createWhisper: (
+		actor: string,
+		session: string,
+		target: Contract,
+		body: string,
+	) => Promise<Contract>;
+	retry: (
+		fn: any,
+		checkResult: any,
+		times?: number,
+		delay?: number,
+	) => Promise<any>;
 }
 
 export interface BackendTestOptions {
@@ -147,22 +177,21 @@ export const before = async (
 
 	const adminSessionToken = jellyfish.sessions!.admin;
 
-	const session = (await jellyfish.getCardById(
+	const sessionContract = (await jellyfish.getCardById(
 		context,
 		adminSessionToken,
 		adminSessionToken,
 	)) as SessionContract;
 
-	assert(session !== null);
+	assert(sessionContract !== null);
 
 	const actorContract = (await jellyfish.getCardById(
 		context,
 		adminSessionToken,
-		session.data.actor,
+		sessionContract.data.actor,
 	)) as UserContract;
 
 	assert(actorContract !== null);
-	const actor = actorContract;
 
 	const bootstrapContracts = [
 		WorkerCards.create,
@@ -328,9 +357,115 @@ export const before = async (
 		return testQueue.producer.waitResults(context, createRequest);
 	};
 
+	const generateRandomWords = (amount: number) => {
+		return randomWords(amount).join(' ');
+	};
+
+	const createUser = async (username: string) => {
+		// Create the user, only if it doesn't exist yet
+		const contract =
+			((await ctx.jellyfish.getCardBySlug(
+				ctx.context,
+				ctx.session,
+				`user-${username}@latest`,
+			)) as UserContract) ||
+			(await ctx.jellyfish.insertCard<UserContract>(ctx.context, ctx.session, {
+				type: 'user@1.0.0',
+				slug: `user-${username}`,
+				data: {
+					email: `${username}@example.com`,
+					hash: 'foobar',
+					roles: ['user-community'],
+				},
+			}));
+
+		// Force login, even if we don't know the password
+		const userSession = await ctx.jellyfish.insertCard(
+			ctx.context,
+			ctx.session,
+			{
+				slug: `session-${contract.slug}-integration-tests-${uuid()}`,
+				type: 'session@1.0.0',
+				data: {
+					actor: contract.id,
+				},
+			},
+		);
+
+		return {
+			contract,
+			session: userSession.id,
+		};
+	};
+
+	const createEvent = async (
+		actor: string,
+		session: string,
+		target: Contract,
+		body: string,
+		type: 'message' | 'whisper',
+	) => {
+		const req = await ctx.queue.producer.enqueue(actor, session, {
+			action: 'action-create-event@1.0.0',
+			context: ctx.context,
+			card: target.id,
+			type: target.type,
+			arguments: {
+				type,
+				payload: {
+					message: body,
+				},
+			},
+		});
+
+		await ctx.flushAll(session);
+		const result: any = await ctx.queue.producer.waitResults(ctx.context, req);
+		expect(result.error).toBe(false);
+		assert(result.data);
+		await ctx.flushAll(session);
+		const contract = (await ctx.jellyfish.getCardById(
+			ctx.context,
+			ctx.session,
+			result.data.id,
+		)) as Contract;
+		assert(contract);
+
+		return contract;
+	};
+
+	const createMessage = (
+		actor: string,
+		session: string,
+		target: Contract,
+		body: string,
+	) => {
+		return createEvent(actor, session, target, body, 'message');
+	};
+
+	const createWhisper = (
+		actor: string,
+		session: string,
+		target: Contract,
+		body: string,
+	) => {
+		return createEvent(actor, session, target, body, 'whisper');
+	};
+
+	const retry = async (fn: any, checkResult: any, times = 10, delay = 500) => {
+		const result = await fn();
+		if (!checkResult(result)) {
+			if (times > 0) {
+				await Bluebird.delay(delay);
+				return retry(fn, checkResult, times - 1);
+			}
+			throw new Error('Ran out of retry attempts');
+		}
+		return result;
+	};
+
 	const ctx: IntegrationTestContext = {
 		actionLibrary,
-		actor,
+		actor: actorContract,
 		backend,
 		cache: testCache,
 		context,
@@ -346,6 +481,12 @@ export const before = async (
 		session: adminSessionToken,
 		waitForMatch,
 		worker: testWorker,
+		generateRandomWords,
+		createUser,
+		createEvent,
+		createMessage,
+		createWhisper,
+		retry,
 	};
 
 	return ctx;
