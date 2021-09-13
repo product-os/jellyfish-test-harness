@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v7.1.1
+## (2021-09-13)
+
+* Clean up both links tables between tests [Lucian Buzzo]
+
 # v7.1.0
 ## (2021-09-13)
 
