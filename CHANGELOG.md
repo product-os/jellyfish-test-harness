@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v7.1.0
+## (2021-09-13)
+
+* Add more integration test helpers [Josh Bowling]
+
 # v7.0.6
 ## (2021-09-12)
 
