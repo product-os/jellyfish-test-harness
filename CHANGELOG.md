@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v7.1.6
+## (2021-09-14)
+
+* Remove cleanup of now defunct links table [Josh Bowling]
+
 # v7.1.5
 ## (2021-09-14)
 
