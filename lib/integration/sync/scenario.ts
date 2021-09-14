@@ -491,9 +491,7 @@ export async function afterEach(context: TestContext): Promise<void> {
  * @param context - test context
  */
 export async function restore(context: TestContext): Promise<void> {
-	// TODO: once we're fully migrated to the new links table format, cleanup this code block
-	// Long term, i'd really like a way to avod this level of manual manipulation of the backend
-	await context.jellyfish.backend.connection.any('DELETE FROM links');
+	// TODO: Should avoid this level of manual manipulation of the backend
 	await context.jellyfish.backend.connection.any('DELETE FROM links2');
 	await context.jellyfish.backend.connection.any('DELETE FROM cards');
 	await context.jellyfish.backend.connection.any(
