@@ -116,6 +116,26 @@ export interface IntegrationTestContext {
 		times?: number,
 		delay?: number,
 	) => Promise<any>;
+	createLink: (
+		actor: string,
+		session: string,
+		fromCard: Contract,
+		toCard: Contract,
+		verb: string,
+		inverseVerb: string,
+	) => Promise<Contract>;
+	createSupportThread: (
+		actor: string,
+		session: string,
+		title: string,
+		options: any,
+	) => Promise<Contract>;
+	createIssue: (
+		actor: string,
+		session: string,
+		title: string,
+		options: any,
+	) => Promise<Contract>;
 }
 
 export interface BackendTestOptions {
@@ -463,6 +483,137 @@ export const before = async (
 		return result;
 	};
 
+	const createLink = async (
+		actor: string,
+		session: string,
+		fromCard: Contract,
+		toCard: Contract,
+		verb: string,
+		inverseVerb: string,
+	) => {
+		const inserted = await ctx.worker.insertCard(
+			ctx.context,
+			session,
+			ctx.worker.typeContracts['link@1.0.0'],
+			{
+				attachEvents: true,
+				actor,
+			},
+			{
+				slug: `link-${fromCard.id}-${verb.replace(/\s/g, '-')}-${
+					toCard.id
+				}-${uuid()}`,
+				tags: [],
+				version: '1.0.0',
+				links: {},
+				requires: [],
+				capabilities: [],
+				active: true,
+				name: verb,
+				data: {
+					inverseName: inverseVerb,
+					from: {
+						id: fromCard.id,
+						type: fromCard.type,
+					},
+					to: {
+						id: toCard.id,
+						type: toCard.type,
+					},
+				},
+			},
+		);
+		assert(inserted);
+		await ctx.flushAll(session);
+
+		const link = await ctx.jellyfish.getCardById(
+			ctx.context,
+			ctx.session,
+			inserted.id,
+		);
+		assert(link);
+		return link;
+	};
+
+	const createSupportThread = async (
+		actor: string,
+		session: string,
+		title: string,
+		data: any,
+	) => {
+		const inserted = await ctx.worker.insertCard(
+			ctx.context,
+			session,
+			ctx.worker.typeContracts['support-thread@1.0.0'],
+			{
+				attachEvents: true,
+				actor,
+			},
+			{
+				name: title,
+				slug: ctx.generateRandomSlug({
+					prefix: 'support-thread',
+				}),
+				version: '1.0.0',
+				data: {
+					product: data.product,
+					inbox: data.inbox,
+					status: data.status,
+				},
+			},
+		);
+		assert(inserted);
+		await ctx.flushAll(session);
+
+		const supportThread = await ctx.jellyfish.getCardById(
+			ctx.context,
+			ctx.session,
+			inserted.id,
+		);
+		assert(supportThread);
+		return supportThread;
+	};
+
+	const createIssue = async (
+		actor: string,
+		session: string,
+		title: string,
+		data: any,
+	) => {
+		const inserted = await ctx.worker.insertCard(
+			ctx.context,
+			session,
+			ctx.worker.typeContracts['issue@1.0.0'],
+			{
+				attachEvents: true,
+				actor,
+			},
+			{
+				name: title,
+				slug: ctx.generateRandomSlug({
+					prefix: 'issue',
+				}),
+				version: '1.0.0',
+				data: {
+					repository: data.repository,
+					description: data.body,
+					status: data.status,
+					archived: data.archived,
+				},
+			},
+		);
+		assert(inserted);
+		await ctx.flushAll(session);
+
+		const issue = await ctx.jellyfish.getCardById(
+			ctx.context,
+			ctx.session,
+			inserted.id,
+		);
+		assert(issue);
+		return issue;
+	};
+
 	const ctx: IntegrationTestContext = {
 		actionLibrary,
 		actor: actorContract,
@@ -487,6 +638,9 @@ export const before = async (
 		createMessage,
 		createWhisper,
 		retry,
+		createLink,
+		createSupportThread,
+		createIssue,
 	};
 
 	return ctx;
