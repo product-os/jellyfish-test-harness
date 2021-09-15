@@ -128,13 +128,13 @@ export interface IntegrationTestContext {
 		actor: string,
 		session: string,
 		title: string,
-		options: any,
+		data: any,
 	) => Promise<Contract>;
 	createIssue: (
 		actor: string,
 		session: string,
 		title: string,
-		options: any,
+		data: any,
 	) => Promise<Contract>;
 }
 
@@ -555,11 +555,7 @@ export const before = async (
 					prefix: 'support-thread',
 				}),
 				version: '1.0.0',
-				data: {
-					product: data.product,
-					inbox: data.inbox,
-					status: data.status,
-				},
+				data,
 			},
 		);
 		assert(inserted);
