@@ -127,13 +127,20 @@ export interface IntegrationTestContext {
 	createSupportThread: (
 		actor: string,
 		session: string,
-		title: string,
+		name: string,
 		data: any,
 	) => Promise<Contract>;
 	createIssue: (
 		actor: string,
 		session: string,
-		title: string,
+		name: string,
+		data: any,
+	) => Promise<Contract>;
+	createContract: (
+		actor: string,
+		session: string,
+		type: string,
+		name: string,
 		data: any,
 	) => Promise<Contract>;
 }
@@ -538,21 +545,54 @@ export const before = async (
 	const createSupportThread = async (
 		actor: string,
 		session: string,
-		title: string,
+		name: string,
+		data: any,
+	) => {
+		const contract = await createContract(
+			actor,
+			session,
+			'support-thread@1.0.0',
+			name,
+			data,
+		);
+		return contract;
+	};
+
+	const createIssue = async (
+		actor: string,
+		session: string,
+		name: string,
+		data: any,
+	) => {
+		const contract = await createContract(
+			actor,
+			session,
+			'issue@1.0.0',
+			name,
+			data,
+		);
+		return contract;
+	};
+
+	const createContract = async (
+		actor: string,
+		session: string,
+		type: string,
+		name: string,
 		data: any,
 	) => {
 		const inserted = await ctx.worker.insertCard(
 			ctx.context,
 			session,
-			ctx.worker.typeContracts['support-thread@1.0.0'],
+			ctx.worker.typeContracts[type],
 			{
 				attachEvents: true,
 				actor,
 			},
 			{
-				name: title,
+				name,
 				slug: ctx.generateRandomSlug({
-					prefix: 'support-thread',
+					prefix: type.split('@')[0],
 				}),
 				version: '1.0.0',
 				data,
@@ -561,53 +601,13 @@ export const before = async (
 		assert(inserted);
 		await ctx.flushAll(session);
 
-		const supportThread = await ctx.jellyfish.getCardById(
+		const contract = await ctx.jellyfish.getCardById(
 			ctx.context,
 			ctx.session,
 			inserted.id,
 		);
-		assert(supportThread);
-		return supportThread;
-	};
-
-	const createIssue = async (
-		actor: string,
-		session: string,
-		title: string,
-		data: any,
-	) => {
-		const inserted = await ctx.worker.insertCard(
-			ctx.context,
-			session,
-			ctx.worker.typeContracts['issue@1.0.0'],
-			{
-				attachEvents: true,
-				actor,
-			},
-			{
-				name: title,
-				slug: ctx.generateRandomSlug({
-					prefix: 'issue',
-				}),
-				version: '1.0.0',
-				data: {
-					repository: data.repository,
-					description: data.body,
-					status: data.status,
-					archived: data.archived,
-				},
-			},
-		);
-		assert(inserted);
-		await ctx.flushAll(session);
-
-		const issue = await ctx.jellyfish.getCardById(
-			ctx.context,
-			ctx.session,
-			inserted.id,
-		);
-		assert(issue);
-		return issue;
+		assert(contract);
+		return contract;
 	};
 
 	const ctx: IntegrationTestContext = {
@@ -637,6 +637,7 @@ export const before = async (
 		createLink,
 		createSupportThread,
 		createIssue,
+		createContract,
 	};
 
 	return ctx;
