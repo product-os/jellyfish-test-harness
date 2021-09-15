@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v7.2.4
+## (2021-09-15)
+
+* Update data parameter for createSupportThread() [Josh Bowling]
+
 # v7.2.3
 ## (2021-09-14)
 
