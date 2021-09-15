@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v7.3.0
+## (2021-09-15)
+
+* Add generic contract create helper [Josh Bowling]
+
 # v7.2.4
 ## (2021-09-15)
 
