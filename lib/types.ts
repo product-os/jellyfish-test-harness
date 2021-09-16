@@ -16,6 +16,7 @@ export interface ActionRequest {
 export interface SetupOptions {
 	suffix?: string;
 	skipConnect?: boolean;
+	[key: string]: any;
 }
 
 export interface Variation {
