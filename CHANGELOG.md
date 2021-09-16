@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v7.4.0
+## (2021-09-16)
+
+* Add ability to dependency inject worker [Josh Bowling]
+
 # v7.3.4
 ## (2021-09-16)
 
