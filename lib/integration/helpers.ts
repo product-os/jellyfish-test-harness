@@ -305,6 +305,19 @@ export const before = async (
 	);
 	testWorker.setTypeContracts(context, types);
 
+	// Update type cards through the worker for generated triggers, etc
+	for (const contract of types) {
+		await testWorker.replaceCard(
+			context,
+			adminSessionToken,
+			testWorker.typeContracts['type@1.0.0'],
+			{
+				attachEvents: false,
+			},
+			contract,
+		);
+	}
+
 	const triggers = await jellyfish.query<TypeContract>(
 		context,
 		adminSessionToken,
