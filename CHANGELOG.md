@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v7.3.4
+## (2021-09-16)
+
+* Update types through worker on bootstrap [Josh Bowling]
+
 # v7.3.3
 ## (2021-09-15)
 
