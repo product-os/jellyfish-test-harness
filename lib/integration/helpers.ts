@@ -33,7 +33,7 @@ import { v4 as uuid } from 'uuid';
 import { cardMixins } from '@balena/jellyfish-core';
 import { PluginManager } from '@balena/jellyfish-plugin-base';
 import { Kernel as CoreKernel } from '@balena/jellyfish-core/build/kernel';
-import { ActionLibrary as IActionLibrary } from '../../lib/types';
+import { ActionLibrary as IActionLibrary, SetupOptions } from '../../lib/types';
 import { Worker, CARDS as WorkerCards } from '@balena/jellyfish-worker';
 import { Sync } from '@balena/jellyfish-sync';
 import randomWords from 'random-words';
@@ -153,7 +153,7 @@ export interface BackendTestOptions {
 export const before = async (
 	plugins: any[],
 	cards: Array<ContractDefinition<ContractData>> = [],
-	options: any = {},
+	options: SetupOptions = {},
 ): Promise<IntegrationTestContext> => {
 	const pluginManager = new PluginManager(pluginContext, {
 		plugins,
@@ -282,7 +282,8 @@ export const before = async (
 
 	await testQueue.producer.initialize(context);
 
-	const testWorker = new Worker(
+	const WorkerClass = options.worker || Worker;
+	const testWorker = new WorkerClass(
 		jellyfish as any,
 		adminSessionToken,
 		actionLibrary,
