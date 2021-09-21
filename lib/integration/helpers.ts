@@ -200,7 +200,35 @@ export const before = async (
 	});
 
 	const allCards = pluginManager.getCards(pluginContext, cardMixins);
+	allCards['action-test-originator'] = Object.assign(
+		{},
+		allCards['action-create-card'],
+		{
+			slug: 'action-test-originator',
+		},
+	);
+
 	const actionLibrary = pluginManager.getActions(pluginContext);
+	Object.assign(actionLibrary, {
+		'action-test-originator': {
+			handler: async (
+				session: string,
+				handlerCtx: any,
+				card: any,
+				request: any,
+			) => {
+				request.arguments.properties.data =
+					request.arguments.properties.data || {};
+				request.arguments.properties.data.originator = request.originator;
+				return actionLibrary['action-create-card'].handler(
+					session,
+					handlerCtx,
+					card,
+					request,
+				);
+			},
+		},
+	});
 
 	const adminSessionToken = jellyfish.sessions!.admin;
 
