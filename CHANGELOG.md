@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v7.5.0
+## (2021-09-21)
+
+* Add action-test-originator to bootstrap [Josh Bowling]
+
 # v7.4.9
 ## (2021-09-20)
 
