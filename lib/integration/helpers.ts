@@ -4,46 +4,43 @@
  * Proprietary and confidential.
  */
 
-import * as _ from 'lodash';
-import * as errio from 'errio';
-import Bluebird from 'bluebird';
-import { v4 as uuidv4 } from 'uuid';
+import {
+	Backend,
+	cardMixins,
+	errors,
+	Kernel,
+	MemoryCache as Cache,
+} from '@balena/jellyfish-core';
+import { PostgresBackend } from '@balena/jellyfish-core/build/backend/postgres';
+import { Cache as JellyfishCache } from '@balena/jellyfish-core/build/cache';
+import { Kernel as CoreKernel } from '@balena/jellyfish-core/build/kernel';
+import { defaultEnvironment } from '@balena/jellyfish-environment';
+import { PluginManager } from '@balena/jellyfish-plugin-base';
+import * as queue from '@balena/jellyfish-queue';
+import { Sync } from '@balena/jellyfish-sync';
 import {
 	ActionRequestContract,
 	Context,
 	Contract,
-	ContractData,
-	ContractDefinition,
 	SessionContract,
 	TypeContract,
 	UserContract,
 } from '@balena/jellyfish-types/build/core';
-import * as queue from '@balena/jellyfish-queue';
-import { defaultEnvironment } from '@balena/jellyfish-environment';
-import {
-	Backend,
-	Kernel,
-	errors,
-	MemoryCache as Cache,
-} from '@balena/jellyfish-core';
-import { Cache as JellyfishCache } from '@balena/jellyfish-core/build/cache';
-import { PostgresBackend } from '@balena/jellyfish-core/build/backend/postgres';
+import { CARDS as WorkerCards, Worker } from '@balena/jellyfish-worker';
 import { strict as assert } from 'assert';
-import { v4 as uuid } from 'uuid';
-import { cardMixins } from '@balena/jellyfish-core';
-import { PluginManager } from '@balena/jellyfish-plugin-base';
-import { Kernel as CoreKernel } from '@balena/jellyfish-core/build/kernel';
-import { ActionLibrary as IActionLibrary, SetupOptions } from '../../lib/types';
-import { Worker, CARDS as WorkerCards } from '@balena/jellyfish-worker';
-import { Sync } from '@balena/jellyfish-sync';
+import Bluebird from 'bluebird';
+import * as errio from 'errio';
+import * as _ from 'lodash';
 import randomWords from 'random-words';
+import { v4 as uuidv4 } from 'uuid';
+import { ActionLibrary as IActionLibrary, SetupOptions } from '../../lib/types';
 
 const pluginContext = {
 	id: 'jellyfish-worker-integration-test',
 };
 
 const generateRandomID = (): string => {
-	return uuid();
+	return uuidv4();
 };
 
 const generateRandomSlug = (options: { prefix?: string } = {}): string => {
@@ -145,25 +142,19 @@ export interface IntegrationTestContext {
 	) => Promise<Contract>;
 }
 
-export interface BackendTestOptions {
-	suffix?: string;
-	skipConnect?: boolean;
-}
-
 export const before = async (
 	plugins: any[],
-	cards: Array<ContractDefinition<ContractData>> = [],
 	options: SetupOptions = {},
 ): Promise<IntegrationTestContext> => {
 	const pluginManager = new PluginManager(pluginContext, {
 		plugins,
 	});
 
-	const suffix = options.suffix || uuidv4();
+	const suffix = options.suffix || generateRandomID();
 	const dbName = `test_${suffix.replace(/-/g, '_')}`;
 
 	const context: any = {
-		id: `CORE-TEST-${uuidv4()}`,
+		id: `CORE-TEST-${generateRandomID()}`,
 	};
 
 	const testCache = new Cache(
@@ -201,6 +192,15 @@ export const before = async (
 
 	const allCards = pluginManager.getCards(pluginContext, cardMixins);
 	const actionLibrary = pluginManager.getActions(pluginContext);
+	if (options.actions) {
+		for (const action of options.actions) {
+			Object.assign(actionLibrary, {
+				[action.card.slug]: {
+					handler: action.handler,
+				},
+			});
+		}
+	}
 
 	const adminSessionToken = jellyfish.sessions!.admin;
 
@@ -244,8 +244,10 @@ export const before = async (
 		bootstrapContracts.push(card);
 	}
 
-	for (const card of cards) {
-		bootstrapContracts.push(card);
+	if (options.cards) {
+		for (const card of options.cards) {
+			bootstrapContracts.push(card);
+		}
 	}
 
 	for (const contract of bootstrapContracts) {
@@ -425,7 +427,9 @@ export const before = async (
 			ctx.context,
 			ctx.session,
 			{
-				slug: `session-${contract.slug}-integration-tests-${uuid()}`,
+				slug: `session-${
+					contract.slug
+				}-integration-tests-${generateRandomID()}`,
 				type: 'session@1.0.0',
 				data: {
 					actor: contract.id,
@@ -523,7 +527,7 @@ export const before = async (
 			{
 				slug: `link-${fromCard.id}-${verb.replace(/\s/g, '-')}-${
 					toCard.id
-				}-${uuid()}`,
+				}-${generateRandomID()}`,
 				tags: [],
 				version: '1.0.0',
 				links: {},

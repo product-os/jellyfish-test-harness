@@ -3,7 +3,10 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential.
  */
-import { Action } from '@balena/jellyfish-types/build/worker';
+
+import type { ActionFile } from '@balena/jellyfish-plugin-base';
+import type { ContractDefinition } from '@balena/jellyfish-types/build/core';
+import type { Action } from '@balena/jellyfish-types/build/worker';
 
 export interface TestContext {
 	[key: string]: any;
@@ -13,10 +16,13 @@ export interface ActionRequest {
 	[key: string]: any;
 }
 
+// TS-TODO: Use proper type for worker
 export interface SetupOptions {
 	suffix?: string;
 	skipConnect?: boolean;
-	[key: string]: any;
+	cards?: ContractDefinition[];
+	actions?: ActionFile[];
+	worker?: any;
 }
 
 export interface Variation {
