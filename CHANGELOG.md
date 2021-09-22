@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.0.0
+## (2021-09-22)
+
+* Move cards param to options, add actions option [Josh Bowling]
+
 # v7.4.11
 ## (2021-09-21)
 
