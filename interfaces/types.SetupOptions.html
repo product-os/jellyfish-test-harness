@@ -76,10 +76,6 @@
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel tsd-kind-interface tsd-parent-kind-module">
-				<h3 class="tsd-before-signature">Indexable</h3>
-				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></div>
-			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
@@ -87,8 +83,11 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.SetupOptions.html#actions" class="tsd-kind-icon">actions</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.SetupOptions.html#cards" class="tsd-kind-icon">cards</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.SetupOptions.html#skipConnect" class="tsd-kind-icon">skip<wbr>Connect</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.SetupOptions.html#suffix" class="tsd-kind-icon">suffix</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="types.SetupOptions.html#worker" class="tsd-kind-icon">worker</a></li>
 							</ul>
 						</section>
 					</div>
@@ -97,12 +96,32 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="actions" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> actions</h3>
+					<div class="tsd-signature tsd-kind-icon">actions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ActionFile</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ContractData</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/product-os/jellyfish-test-harness/blob/514c52c/lib/types.ts#L24">lib/types.ts:24</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="cards" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cards</h3>
+					<div class="tsd-signature tsd-kind-icon">cards<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ContractDefinition</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ContractData</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/product-os/jellyfish-test-harness/blob/514c52c/lib/types.ts#L23">lib/types.ts:23</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="skipConnect" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> skip<wbr>Connect</h3>
 					<div class="tsd-signature tsd-kind-icon">skip<wbr>Connect<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/product-os/jellyfish-test-harness/blob/57ca67e/lib/types.ts#L18">lib/types.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/product-os/jellyfish-test-harness/blob/514c52c/lib/types.ts#L22">lib/types.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -112,7 +131,17 @@
 					<div class="tsd-signature tsd-kind-icon">suffix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/product-os/jellyfish-test-harness/blob/57ca67e/lib/types.ts#L17">lib/types.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/product-os/jellyfish-test-harness/blob/514c52c/lib/types.ts#L21">lib/types.ts:21</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="worker" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> worker</h3>
+					<div class="tsd-signature tsd-kind-icon">worker<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/product-os/jellyfish-test-harness/blob/514c52c/lib/types.ts#L25">lib/types.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -164,10 +193,19 @@
 						<a href="types.SetupOptions.html" class="tsd-kind-icon">Setup<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="types.SetupOptions.html#actions" class="tsd-kind-icon">actions</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="types.SetupOptions.html#cards" class="tsd-kind-icon">cards</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="types.SetupOptions.html#skipConnect" class="tsd-kind-icon">skip<wbr>Connect</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="types.SetupOptions.html#suffix" class="tsd-kind-icon">suffix</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="types.SetupOptions.html#worker" class="tsd-kind-icon">worker</a>
 							</li>
 						</ul>
 					</li>
