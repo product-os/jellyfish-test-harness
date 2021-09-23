@@ -88,6 +88,7 @@ export interface IntegrationTestContext {
 	createUser: (
 		username: string,
 		hash?: string,
+		email?: string,
 	) => Promise<{ contract: UserContract; session: string }>;
 	createEvent: (
 		actor: string,
@@ -405,7 +406,7 @@ export const before = async (
 		return randomWords(amount).join(' ');
 	};
 
-	const createUser = async (username: string, hash = 'foobar') => {
+	const createUser = async (username: string, hash = 'foobar', email = '') => {
 		// Create the user, only if it doesn't exist yet
 		const contract =
 			((await ctx.jellyfish.getCardBySlug(
@@ -417,7 +418,7 @@ export const before = async (
 				type: 'user@1.0.0',
 				slug: `user-${username}`,
 				data: {
-					email: `${username}@example.com`,
+					email: _.isEmpty(email) ? `${username}@example.com` : email,
 					hash,
 					roles: ['user-community'],
 				},
