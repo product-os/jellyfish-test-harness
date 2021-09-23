@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.2.0
+## (2021-09-23)
+
+* Add ability to set user email [Josh Bowling]
+
 # v8.1.1
 ## (2021-09-23)
 
