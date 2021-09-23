@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.1.0
+## (2021-09-23)
+
+* Add ability to set user password [Josh Bowling]
+
 # v8.0.2
 ## (2021-09-22)
 
