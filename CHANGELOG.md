@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.1.6
+## (2021-09-25)
+
+* patch: Update dependency @types/node to ^14.17.19 [Renovate Bot]
+
 # v8.1.5
 ## (2021-09-25)
 
