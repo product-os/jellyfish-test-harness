@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.1.18
+## (2021-10-02)
+
+* patch: Update dependency typedoc to ^0.22.5 [Renovate Bot]
+
 # v8.1.17
 ## (2021-10-02)
 
