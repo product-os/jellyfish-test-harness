@@ -88,6 +88,7 @@ export interface IntegrationTestContext {
 	createUser: (
 		username: string,
 		hash?: string,
+		roles?: string[],
 	) => Promise<{ contract: UserContract; session: string }>;
 	createEvent: (
 		actor: string,
@@ -127,12 +128,14 @@ export interface IntegrationTestContext {
 		session: string,
 		name: string,
 		data: any,
+		markers?: any,
 	) => Promise<Contract>;
 	createIssue: (
 		actor: string,
 		session: string,
 		name: string,
 		data: any,
+		markers?: any,
 	) => Promise<Contract>;
 	createContract: (
 		actor: string,
@@ -140,6 +143,7 @@ export interface IntegrationTestContext {
 		type: string,
 		name: string,
 		data: any,
+		markers?: any,
 	) => Promise<Contract>;
 }
 
@@ -405,7 +409,11 @@ export const before = async (
 		return randomWords(amount).join(' ');
 	};
 
-	const createUser = async (username: string, hash = 'foobar') => {
+	const createUser = async (
+		username: string,
+		hash = 'foobar',
+		roles = ['user-community'],
+	) => {
 		// Create the user, only if it doesn't exist yet
 		const contract =
 			((await ctx.jellyfish.getCardBySlug(
@@ -419,7 +427,7 @@ export const before = async (
 				data: {
 					email: `${username}@example.com`,
 					hash,
-					roles: ['user-community'],
+					roles,
 				},
 			}));
 
@@ -566,6 +574,7 @@ export const before = async (
 		session: string,
 		name: string,
 		data: any,
+		markers = [],
 	) => {
 		const contract = await createContract(
 			actor,
@@ -573,6 +582,7 @@ export const before = async (
 			'support-thread@1.0.0',
 			name,
 			data,
+			markers,
 		);
 		return contract;
 	};
@@ -582,6 +592,7 @@ export const before = async (
 		session: string,
 		name: string,
 		data: any,
+		markers = [],
 	) => {
 		const contract = await createContract(
 			actor,
@@ -589,6 +600,7 @@ export const before = async (
 			'issue@1.0.0',
 			name,
 			data,
+			markers,
 		);
 		return contract;
 	};
@@ -599,6 +611,7 @@ export const before = async (
 		type: string,
 		name: string,
 		data: any,
+		markers = [],
 	) => {
 		const inserted = await ctx.worker.insertCard(
 			ctx.context,
@@ -614,6 +627,7 @@ export const before = async (
 					prefix: type.split('@')[0],
 				}),
 				version: '1.0.0',
+				markers,
 				data,
 			},
 		);
