@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.1.24
+## (2021-10-05)
+
+* 🔄 Synced file(s) with product-os/jellyfish-config [joshbwlng]
+
 # v8.1.23
 ## (2021-10-03)
 
