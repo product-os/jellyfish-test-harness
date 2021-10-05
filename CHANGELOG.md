@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.1.25
+## (2021-10-05)
+
+* Add roles and markers options [Josh Bowling]
+
 # v8.1.24
 ## (2021-10-05)
 
