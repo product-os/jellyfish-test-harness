@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.1.87
+## (2021-11-13)
+
+* patch: Update dependency @balena/jellyfish-queue to ^1.0.327 [Renovate Bot]
+
 # v8.1.86
 ## (2021-11-13)
 
