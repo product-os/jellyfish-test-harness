@@ -47,7 +47,7 @@
     "@balena/jellyfish-core": "^8.0.11",
     "@balena/jellyfish-environment": "^5.1.2",
     "@balena/jellyfish-plugin-base": "^2.1.269",
-    "@balena/jellyfish-queue": "^1.0.326",
+    "@balena/jellyfish-queue": "^1.0.327",
     "@balena/jellyfish-sync": "^6.1.65",
     "@balena/jellyfish-worker": "^10.0.82",
     "bluebird": "^3.7.2",
