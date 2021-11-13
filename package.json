@@ -57,7 +57,7 @@
     "js-combinatorics": "^1.5.4",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",
-    "nock": "^13.1.4",
+    "nock": "^13.2.1",
     "random-words": "^1.1.1",
     "uuid": "^8.3.2"
   },
@@ -69,7 +69,7 @@
     "@types/bluebird": "^3.5.36",
     "@types/jest": "^27.0.2",
     "@types/morgan": "^1.9.3",
-    "@types/node": "^16.11.6",
+    "@types/node": "^16.11.7",
     "@types/uuid": "^8.3.1",
     "depcheck": "^1.4.2",
     "deplint": "^1.1.3",
