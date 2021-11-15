@@ -44,10 +44,10 @@
   "author": "Balena.io. <hello@balena.io>",
   "license": "UNLICENSED",
   "dependencies": {
-    "@balena/jellyfish-core": "^8.0.16",
+    "@balena/jellyfish-core": "^8.0.18",
     "@balena/jellyfish-environment": "^5.1.6",
     "@balena/jellyfish-plugin-base": "^2.1.279",
-    "@balena/jellyfish-queue": "^1.0.332",
+    "@balena/jellyfish-queue": "^1.0.333",
     "@balena/jellyfish-sync": "^6.1.77",
     "@balena/jellyfish-worker": "^10.0.87",
     "bluebird": "^3.7.2",
@@ -62,7 +62,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@balena/jellycheck": "^0.1.7",
+    "@balena/jellycheck": "^0.1.8",
     "@balena/jellyfish-config": "^1.5.1",
     "@balena/jellyfish-types": "^1.2.0",
     "@balena/lint": "^6.1.1",
