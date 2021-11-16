@@ -42,7 +42,7 @@
     "check": "jellycheck"
   },
   "author": "Balena.io. <hello@balena.io>",
-  "license": "UNLICENSED",
+  "license": "AGPL-3.0",
   "dependencies": {
     "@balena/jellyfish-core": "^8.0.19",
     "@balena/jellyfish-environment": "^5.1.9",
