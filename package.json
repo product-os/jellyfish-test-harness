@@ -45,10 +45,10 @@
   "license": "AGPL-3.0",
   "dependencies": {
     "@balena/jellyfish-core": "^8.0.19",
-    "@balena/jellyfish-environment": "^5.1.9",
+    "@balena/jellyfish-environment": "^5.1.10",
     "@balena/jellyfish-plugin-base": "^2.1.285",
     "@balena/jellyfish-queue": "^1.0.337",
-    "@balena/jellyfish-sync": "^6.1.80",
+    "@balena/jellyfish-sync": "^6.1.81",
     "@balena/jellyfish-worker": "^10.0.93",
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
