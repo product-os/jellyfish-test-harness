@@ -1,9 +1,3 @@
-/*
- * Copyright (C) Balena.io - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited.
- * Proprietary and confidential.
- */
-
 // tslint:disable: no-var-requires
 import Bluebird from 'bluebird';
 import { v4 as uuidv4 } from 'uuid';

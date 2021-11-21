@@ -1,9 +1,3 @@
-/*
- * Copyright (C) Balena.io - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited.
- * Proprietary and confidential.
- */
-
 // TODO: Remove in favor of helpers.ts
 import { defaultEnvironment } from '@balena/jellyfish-environment';
 import { v4 as uuidv4 } from 'uuid';
