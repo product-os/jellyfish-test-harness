@@ -1,9 +1,3 @@
-/*
- * Copyright (C) Balena.io - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited.
- * Proprietary and confidential.
- */
-
 import type { ActionFile } from '@balena/jellyfish-plugin-base';
 import type { ContractDefinition } from '@balena/jellyfish-types/build/core';
 import type { Action } from '@balena/jellyfish-types/build/worker';
