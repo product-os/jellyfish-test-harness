@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.1.119
+## (2021-11-21)
+
+* Remove license headers [Josh Bowling]
+
 # v8.1.118
 ## (2021-11-20)
 
