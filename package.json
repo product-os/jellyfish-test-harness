@@ -69,7 +69,7 @@
     "@types/bluebird": "^3.5.36",
     "@types/jest": "^27.0.3",
     "@types/morgan": "^1.9.3",
-    "@types/node": "^16.11.9",
+    "@types/node": "^16.11.10",
     "@types/uuid": "^8.3.3",
     "depcheck": "^1.4.2",
     "deplint": "^1.1.3",
