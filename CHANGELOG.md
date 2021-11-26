@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.1.144
+## (2021-11-26)
+
+* patch: Update dependency @balena/lint to ^6.2.0 [Renovate Bot]
+
 # v8.1.143
 ## (2021-11-26)
 
