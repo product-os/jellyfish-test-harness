@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.1.141
+## (2021-11-25)
+
+* patch: Update dependency typescript to ^4.5.2 [Renovate Bot]
+
 # v8.1.140
 ## (2021-11-25)
 
