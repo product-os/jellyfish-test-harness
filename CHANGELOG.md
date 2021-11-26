@@ -5,6 +5,12 @@
 
 # v1.0.1
 
+# v8.1.142
+## (2021-11-26)
+
+* patch: Update internal-patch [Renovate Bot]
+* Use product-os/renovate-config [Josh Bowling]
+
 # v8.1.141
 ## (2021-11-25)
 
