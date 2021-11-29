@@ -43,10 +43,10 @@
   "author": "Balena.io. <hello@balena.io>",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@balena/jellyfish-core": "^8.1.30",
+    "@balena/jellyfish-core": "^8.1.31",
     "@balena/jellyfish-environment": "^5.1.26",
     "@balena/jellyfish-plugin-base": "^2.1.310",
-    "@balena/jellyfish-queue": "^1.0.364",
+    "@balena/jellyfish-queue": "^1.0.365",
     "@balena/jellyfish-sync": "^6.1.116",
     "@balena/jellyfish-worker": "^10.0.125",
     "bluebird": "^3.7.2",
