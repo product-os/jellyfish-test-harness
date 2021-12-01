@@ -44,7 +44,7 @@
   "license": "AGPL-3.0",
   "dependencies": {
     "@balena/jellyfish-core": "^8.1.33",
-    "@balena/jellyfish-environment": "^5.1.26",
+    "@balena/jellyfish-environment": "^5.2.0",
     "@balena/jellyfish-plugin-base": "^2.1.310",
     "@balena/jellyfish-queue": "^1.0.367",
     "@balena/jellyfish-sync": "^6.1.116",
