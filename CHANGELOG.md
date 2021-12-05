@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.1.175
+## (2021-12-05)
+
+* patch: Update dependency ts-jest to ^27.1.0 [Renovate Bot]
+
 # v8.1.174
 ## (2021-12-05)
 
