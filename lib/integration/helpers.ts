@@ -22,7 +22,6 @@ import {
 } from '@balena/jellyfish-types/build/core';
 import { CARDS as WorkerCards, Worker } from '@balena/jellyfish-worker';
 import { strict as assert } from 'assert';
-import Bluebird from 'bluebird';
 import * as errio from 'errio';
 import * as _ from 'lodash';
 import randomWords from 'random-words';
@@ -274,7 +273,9 @@ export const before = async (
 				return null;
 			}
 
-			await Bluebird.delay(10);
+			await new Promise((resolve) => {
+				setTimeout(resolve, 10);
+			});
 			return dequeue!(times - 1);
 		}
 
@@ -374,7 +375,9 @@ export const before = async (
 		if (results.length > 0) {
 			return results[0];
 		}
-		await Bluebird.delay(500);
+		await new Promise((resolve) => {
+			setTimeout(resolve, 500);
+		});
 		return waitForMatch<T>(waitQuery, times - 1);
 	};
 
@@ -503,7 +506,9 @@ export const before = async (
 		const result = await fn();
 		if (!checkResult(result)) {
 			if (times > 0) {
-				await Bluebird.delay(delay);
+				await new Promise((resolve) => {
+					setTimeout(resolve, delay);
+				});
 				return retry(fn, checkResult, times - 1);
 			}
 			throw new Error('Ran out of retry attempts');

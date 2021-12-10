@@ -1,5 +1,4 @@
 // tslint:disable: no-var-requires
-import Bluebird from 'bluebird';
 import { v4 as uuidv4 } from 'uuid';
 import type { ActionRequest, SetupOptions, TestContext } from '../../types';
 import * as helpers from '../backend-helpers';
@@ -73,7 +72,9 @@ async function runBefore(
 				return null;
 			}
 
-			await Bluebird.delay(10);
+			await new Promise((resolve) => {
+				setTimeout(resolve, 10);
+			});
 			return context.dequeue(times - 1);
 		}
 

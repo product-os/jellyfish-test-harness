@@ -1,6 +1,5 @@
 import type { Contract } from '@balena/jellyfish-types/build/core';
 import { strict as assert } from 'assert';
-import Bluebird from 'bluebird';
 import clone from 'lodash/clone';
 import cloneDeep from 'lodash/cloneDeep';
 import compact from 'lodash/compact';
@@ -293,9 +292,8 @@ export async function webhookScenario(
 		return true;
 	};
 
-	const actualTail = await Bluebird.map(
-		sortBy(filter(timeline, tailFilter), tailSort),
-		async (card: any) => {
+	const actualTail = await Promise.all(
+		sortBy(filter(timeline, tailFilter), tailSort).map(async (card: any) => {
 			Reflect.deleteProperty(card, 'slug');
 			Reflect.deleteProperty(card, 'links');
 			Reflect.deleteProperty(card, 'markers');
@@ -354,7 +352,7 @@ export async function webhookScenario(
 			}
 
 			return card;
-		},
+		}),
 	);
 
 	const expectedTail = map(
