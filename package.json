@@ -47,7 +47,7 @@
     "@balena/jellyfish-environment": "^6.0.1",
     "@balena/jellyfish-plugin-base": "^2.1.323",
     "@balena/jellyfish-queue": "^1.0.386",
-    "@balena/jellyfish-sync": "^6.1.130",
+    "@balena/jellyfish-sync": "^6.1.131",
     "@balena/jellyfish-worker": "^10.1.4",
     "body-parser": "^1.19.1",
     "errio": "^1.2.2",
