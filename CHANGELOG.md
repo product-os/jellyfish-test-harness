@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.1.192
+## (2021-12-11)
+
+* patch: Update dependency @balena/jellyfish-plugin-base to ^2.1.323 [Renovate Bot]
+
 # v8.1.191
 ## (2021-12-11)
 
