@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.1.191
+## (2021-12-11)
+
+* patch: Update external-non-major [Renovate Bot]
+
 # v8.1.190
 ## (2021-12-11)
 
