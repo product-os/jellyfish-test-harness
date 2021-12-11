@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.1.190
+## (2021-12-11)
+
+* Bump internal dependencies [Josh Bowling]
+
 # v8.1.189
 ## (2021-12-11)
 
