@@ -43,12 +43,12 @@
   "author": "Balena.io. <hello@balena.io>",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@balena/jellyfish-core": "^8.1.48",
+    "@balena/jellyfish-core": "^8.1.50",
     "@balena/jellyfish-environment": "^6.0.1",
     "@balena/jellyfish-plugin-base": "^2.1.321",
-    "@balena/jellyfish-queue": "^1.0.384",
-    "@balena/jellyfish-sync": "^6.1.128",
-    "@balena/jellyfish-worker": "^10.1.1",
+    "@balena/jellyfish-queue": "^1.0.386",
+    "@balena/jellyfish-sync": "^6.1.130",
+    "@balena/jellyfish-worker": "^10.1.4",
     "body-parser": "^1.19.0",
     "errio": "^1.2.2",
     "express": "^4.17.1",
@@ -60,8 +60,8 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@balena/jellyfish-config": "^2.0.1",
-    "@balena/jellyfish-types": "^1.2.0",
+    "@balena/jellyfish-config": "^2.0.2",
+    "@balena/jellyfish-types": "^1.2.39",
     "@balena/lint": "^6.2.0",
     "@types/jest": "^27.0.3",
     "@types/morgan": "^1.9.3",
