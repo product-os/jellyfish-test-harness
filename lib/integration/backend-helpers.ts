@@ -33,9 +33,9 @@ async function backendBefore(
 		} as any),
 	);
 
-	context.context = {
+	context.context = new Context({
 		id: `CORE-TEST-${uuidv4()}`,
-	};
+	});
 
 	if (context.cache) {
 		await context.cache.connect(context.context);
@@ -53,7 +53,7 @@ async function backendBefore(
 		return;
 	}
 
-	await context.backend.connect(new Context(context.context));
+	await context.backend.connect(context.context);
 }
 
 /**
@@ -68,7 +68,7 @@ async function backendAfter(context: TestContext): Promise<void> {
 	 * database as test databases are destroyed before
 	 * the next test run anyways.
 	 */
-	await context.backend.disconnect(new Context(context.context));
+	await context.backend.disconnect(context.context);
 
 	if (context.cache) {
 		await context.cache.disconnect();
@@ -92,8 +92,8 @@ export async function before(
 	});
 
 	if (options.suffix) {
-		await context.backend.connect(new Context(context.context));
-		await context.backend.reset(new Context(context.context));
+		await context.backend.connect(context.context);
+		await context.backend.reset(context.context);
 	}
 
 	context.kernel = new Kernel(context.backend);
@@ -109,7 +109,7 @@ export async function before(
  * @param context - test context
  */
 export async function after(context: TestContext): Promise<void> {
-	await context.backend.drop(new Context(context.context));
-	await context.kernel.disconnect(new Context(context.context));
+	await context.backend.drop(context.context);
+	await context.kernel.disconnect(context.context);
 	await backendAfter(context);
 }
