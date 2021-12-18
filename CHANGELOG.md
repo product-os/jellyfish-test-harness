@@ -5,6 +5,12 @@
 
 # v1.0.1
 
+# v8.1.203
+## (2021-12-18)
+
+* Update core calls using new Context [Josh Bowling]
+* patch: Update dependency @balena/jellyfish-core to ^8.2.2 [Renovate Bot]
+
 # v8.1.202
 ## (2021-12-16)
 
