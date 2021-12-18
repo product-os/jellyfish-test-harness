@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v8.1.209
+## (2021-12-18)
+
+* patch: Update dependency lint-staged to ^12.1.3 [Renovate Bot]
+
 # v8.1.208
 ## (2021-12-18)
 
