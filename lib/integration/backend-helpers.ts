@@ -1,4 +1,5 @@
 // TODO: Remove in favor of helpers.ts
+import { Context } from '@balena/jellyfish-core/build/context';
 import { defaultEnvironment } from '@balena/jellyfish-environment';
 import { v4 as uuidv4 } from 'uuid';
 import type { SetupOptions, TestContext } from '../types';
@@ -52,7 +53,7 @@ async function backendBefore(
 		return;
 	}
 
-	await context.backend.connect(context.context);
+	await context.backend.connect(new Context(context.context));
 }
 
 /**
@@ -67,7 +68,7 @@ async function backendAfter(context: TestContext): Promise<void> {
 	 * database as test databases are destroyed before
 	 * the next test run anyways.
 	 */
-	await context.backend.disconnect(context.context);
+	await context.backend.disconnect(new Context(context.context));
 
 	if (context.cache) {
 		await context.cache.disconnect();
@@ -91,8 +92,8 @@ export async function before(
 	});
 
 	if (options.suffix) {
-		await context.backend.connect(context.context);
-		await context.backend.reset(context.context);
+		await context.backend.connect(new Context(context.context));
+		await context.backend.reset(new Context(context.context));
 	}
 
 	context.kernel = new Kernel(context.backend);
@@ -108,7 +109,7 @@ export async function before(
  * @param context - test context
  */
 export async function after(context: TestContext): Promise<void> {
-	await context.backend.drop(context.context);
-	await context.kernel.disconnect(context.context);
+	await context.backend.drop(new Context(context.context));
+	await context.kernel.disconnect(new Context(context.context));
 	await backendAfter(context);
 }

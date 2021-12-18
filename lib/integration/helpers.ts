@@ -5,6 +5,7 @@ import {
 	Kernel,
 	MemoryCache as Cache,
 } from '@balena/jellyfish-core';
+import { Context as CoreContext } from '@balena/jellyfish-core/build/context';
 import { PostgresBackend } from '@balena/jellyfish-core/build/backend/postgres';
 import { Cache as JellyfishCache } from '@balena/jellyfish-core/build/cache';
 import { Kernel as CoreKernel } from '@balena/jellyfish-core/build/kernel';
@@ -172,12 +173,12 @@ export const before = async (
 	);
 
 	if (!options.skipConnect) {
-		await backend.connect(context);
+		await backend.connect(new CoreContext(context));
 	}
 
 	if (options.suffix) {
-		await backend.connect(context);
-		await backend.reset(context);
+		await backend.connect(new CoreContext(context));
+		await backend.reset(new CoreContext(context));
 	}
 
 	const jellyfish = new Kernel(backend);
@@ -681,14 +682,14 @@ export const after = async (ctx: IntegrationTestContext) => {
 	}
 
 	if (ctx.jellyfish) {
-		await ctx.backend.drop(ctx.context);
+		await ctx.backend.drop(new CoreContext(ctx.context));
 		await ctx.jellyfish.disconnect(ctx.context);
 		/*
 		 * We can just disconnect and not destroy the whole
 		 * database as test databases are destroyed before
 		 * the next test run anyways.
 		 */
-		await ctx.backend.disconnect(ctx.context);
+		await ctx.backend.disconnect(new CoreContext(ctx.context));
 
 		if (ctx.cache) {
 			await ctx.cache.disconnect();
