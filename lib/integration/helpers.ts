@@ -1,35 +1,33 @@
-import {
-	Backend,
-	cardMixins,
-	errors,
-	Kernel,
-	MemoryCache as Cache,
-} from '@balena/jellyfish-core';
-import { Context as CoreContext } from '@balena/jellyfish-core/build/context';
-import { PostgresBackend } from '@balena/jellyfish-core/build/backend/postgres';
-import { Cache as JellyfishCache } from '@balena/jellyfish-core/build/cache';
-import { Kernel as CoreKernel } from '@balena/jellyfish-core/build/kernel';
+import { strict as assert } from 'assert';
+import * as core from '@balena/jellyfish-core';
+import { cardMixins, CoreKernel, MemoryCache } from '@balena/jellyfish-core';
 import { defaultEnvironment } from '@balena/jellyfish-environment';
+import type { LogContext } from '@balena/jellyfish-logger';
 import { PluginManager } from '@balena/jellyfish-plugin-base';
-import * as queue from '@balena/jellyfish-queue';
-import { Sync } from '@balena/jellyfish-sync';
 import {
+	Consumer,
+	errors as queueErrors,
+	Producer,
+} from '@balena/jellyfish-queue';
+import { Sync } from '@balena/jellyfish-sync';
+import type {
 	ActionRequestContract,
-	Context,
 	Contract,
 	SessionContract,
 	TypeContract,
 	UserContract,
 } from '@balena/jellyfish-types/build/core';
 import { CARDS as WorkerCards, Worker } from '@balena/jellyfish-worker';
-import { strict as assert } from 'assert';
 import * as errio from 'errio';
 import * as _ from 'lodash';
 import randomWords from 'random-words';
 import { v4 as uuidv4 } from 'uuid';
-import { ActionLibrary as IActionLibrary, SetupOptions } from '../../lib/types';
+import type {
+	ActionLibrary as IActionLibrary,
+	SetupOptions,
+} from '../../lib/types';
 
-const pluginContext = {
+const pluginLogContext = {
 	id: 'jellyfish-worker-integration-test',
 };
 
@@ -46,21 +44,17 @@ const generateRandomSlug = (options: { prefix?: string } = {}): string => {
 	return slug;
 };
 
-const Consumer = queue.Consumer;
-const Producer = queue.Producer;
-
 export interface IntegrationTestContext {
-	cache: JellyfishCache;
-	context: Context;
-	backend: PostgresBackend;
+	cache: MemoryCache;
+	logContext: LogContext;
+	kernel: CoreKernel;
 	session: string;
 	actor: UserContract;
 	dequeue: (times?: number) => Promise<ActionRequestContract | null>;
 	queue: {
-		consumer: queue.Consumer;
-		producer: queue.Producer;
+		consumer: Consumer;
+		producer: Producer;
 	};
-	jellyfish: CoreKernel;
 	worker: InstanceType<typeof Worker>;
 	flush: (session: string) => Promise<any>;
 	flushAll: (session: string) => Promise<void>;
@@ -145,18 +139,18 @@ export const before = async (
 	plugins: any[],
 	options: SetupOptions = {},
 ): Promise<IntegrationTestContext> => {
-	const pluginManager = new PluginManager(pluginContext, {
+	const pluginManager = new PluginManager(pluginLogContext, {
 		plugins,
 	});
 
 	const suffix = options.suffix || generateRandomID();
 	const dbName = `test_${suffix.replace(/-/g, '_')}`;
 
-	const context: any = {
+	const logContext: any = {
 		id: `CORE-TEST-${generateRandomID()}`,
 	};
 
-	const testCache = new Cache(
+	const testCache = new MemoryCache(
 		Object.assign({}, defaultEnvironment.redis, {
 			namespace: dbName,
 		}) as any,
@@ -164,33 +158,32 @@ export const before = async (
 
 	await testCache.connect();
 
-	const backend = new Backend(
+	const kernel = await core.create(
+		logContext,
 		testCache,
-		errors,
 		Object.assign({}, defaultEnvironment.database.options, {
 			database: dbName,
 		}),
 	);
 
 	if (!options.skipConnect) {
-		await backend.connect(new CoreContext(context));
+		await kernel.initialize(logContext);
 	}
 
 	if (options.suffix) {
-		await backend.connect(new CoreContext(context));
-		await backend.reset(new CoreContext(context));
+		await kernel.initialize(logContext);
+		await kernel.reset(logContext);
 	}
 
-	const jellyfish = new Kernel(backend);
-	await jellyfish.initialize(context);
-
-	const integrations = pluginManager.getSyncIntegrations(pluginContext) as any;
-	context.sync = new Sync({
+	const integrations = pluginManager.getSyncIntegrations(
+		pluginLogContext,
+	) as any;
+	logContext.sync = new Sync({
 		integrations,
 	});
 
-	const allCards = pluginManager.getCards(pluginContext, cardMixins);
-	const actionLibrary = pluginManager.getActions(pluginContext);
+	const allCards = pluginManager.getCards(pluginLogContext, cardMixins);
+	const actionLibrary = pluginManager.getActions(pluginLogContext);
 	if (options.actions) {
 		for (const action of options.actions) {
 			Object.assign(actionLibrary, {
@@ -201,18 +194,18 @@ export const before = async (
 		}
 	}
 
-	const adminSessionToken = jellyfish.sessions!.admin;
+	const adminSessionToken = kernel.sessions!.admin;
 
-	const sessionContract = (await jellyfish.getCardById(
-		context,
+	const sessionContract = (await kernel.getCardById(
+		logContext,
 		adminSessionToken,
 		adminSessionToken,
 	)) as SessionContract;
 
 	assert(sessionContract !== null);
 
-	const actorContract = (await jellyfish.getCardById(
-		context,
+	const actorContract = (await kernel.getCardById(
+		logContext,
 		adminSessionToken,
 		sessionContract.data.actor,
 	)) as UserContract;
@@ -250,19 +243,19 @@ export const before = async (
 	}
 
 	for (const contract of bootstrapContracts) {
-		await jellyfish.insertCard(context, adminSessionToken, contract);
+		await kernel.insertCard(logContext, adminSessionToken, contract);
 	}
 
 	const testQueue = {
 		// TODO: Fix type casting
-		consumer: new Consumer(jellyfish as any, adminSessionToken),
-		producer: new Producer(jellyfish as any, adminSessionToken),
+		consumer: new Consumer(kernel, adminSessionToken),
+		producer: new Producer(kernel, adminSessionToken),
 	};
 
 	const consumedActionRequests: any[] = [];
 
 	await testQueue.consumer.initializeWithEventHandler(
-		context,
+		logContext,
 		async (actionRequest: any) => {
 			consumedActionRequests.push(actionRequest);
 		},
@@ -283,20 +276,20 @@ export const before = async (
 		return consumedActionRequests.shift();
 	};
 
-	await testQueue.producer.initialize(context);
+	await testQueue.producer.initialize(logContext);
 
 	const WorkerClass = options.worker || Worker;
 	const testWorker = new WorkerClass(
-		jellyfish as any,
+		kernel,
 		adminSessionToken,
 		actionLibrary,
 		testQueue.consumer,
 		testQueue.producer,
 	);
-	await testWorker.initialize(context);
+	await testWorker.initialize(logContext);
 
-	const types = await jellyfish.query<TypeContract>(
-		context,
+	const types = await kernel.query<TypeContract>(
+		logContext,
 		adminSessionToken,
 		{
 			type: 'object',
@@ -307,12 +300,12 @@ export const before = async (
 			},
 		},
 	);
-	testWorker.setTypeContracts(context, types);
+	testWorker.setTypeContracts(logContext, types);
 
 	// Update type cards through the worker for generated triggers, etc
 	for (const contract of types) {
 		await testWorker.replaceCard(
-			context,
+			logContext,
 			adminSessionToken,
 			testWorker.typeContracts['type@1.0.0'],
 			{
@@ -322,8 +315,8 @@ export const before = async (
 		);
 	}
 
-	const triggers = await jellyfish.query<TypeContract>(
-		context,
+	const triggers = await kernel.query<TypeContract>(
+		logContext,
 		adminSessionToken,
 		{
 			type: 'object',
@@ -334,7 +327,7 @@ export const before = async (
 			},
 		},
 	);
-	testWorker.setTriggers(context, triggers);
+	testWorker.setTriggers(logContext, triggers);
 
 	// The flush method gives us a way of manually executing enqueued action requests,
 	// allowing fine grained control in test scenarios. In a production setting, the
@@ -351,8 +344,8 @@ export const before = async (
 		if (result.error) {
 			const Constructor =
 				testWorker.errors[result.data.name] ||
-				queue.errors[result.data.name] ||
-				jellyfish.errors[result.data.name] ||
+				queueErrors[result.data.name] ||
+				kernel.errors[result.data.name] ||
 				Error;
 
 			const error = new Constructor(result.data.message);
@@ -368,8 +361,8 @@ export const before = async (
 		if (times === 0) {
 			throw new Error('The wait query did not resolve');
 		}
-		const results = await jellyfish.query<T>(
-			context,
+		const results = await kernel.query<T>(
+			logContext,
 			adminSessionToken,
 			waitQuery,
 		);
@@ -400,7 +393,7 @@ export const before = async (
 			action,
 		);
 		await flush(ssn);
-		return testQueue.producer.waitResults(context, createRequest);
+		return testQueue.producer.waitResults(logContext, createRequest);
 	};
 
 	const generateRandomWords = (amount: number) => {
@@ -414,12 +407,12 @@ export const before = async (
 	) => {
 		// Create the user, only if it doesn't exist yet
 		const contract =
-			((await ctx.jellyfish.getCardBySlug(
-				ctx.context,
+			((await ctx.kernel.getCardBySlug(
+				ctx.logContext,
 				ctx.session,
 				`user-${username}@latest`,
 			)) as UserContract) ||
-			(await ctx.jellyfish.insertCard<UserContract>(ctx.context, ctx.session, {
+			(await ctx.kernel.insertCard<UserContract>(ctx.logContext, ctx.session, {
 				type: 'user@1.0.0',
 				slug: `user-${username}`,
 				data: {
@@ -430,8 +423,8 @@ export const before = async (
 			}));
 
 		// Force login, even if we don't know the password
-		const userSession = await ctx.jellyfish.insertCard(
-			ctx.context,
+		const userSession = await ctx.kernel.insertCard(
+			ctx.logContext,
 			ctx.session,
 			{
 				slug: `session-${
@@ -459,7 +452,7 @@ export const before = async (
 	) => {
 		const req = await ctx.queue.producer.enqueue(actor, session, {
 			action: 'action-create-event@1.0.0',
-			context: ctx.context,
+			logContext: ctx.logContext,
 			card: target.id,
 			type: target.type,
 			arguments: {
@@ -471,12 +464,15 @@ export const before = async (
 		});
 
 		await ctx.flushAll(session);
-		const result: any = await ctx.queue.producer.waitResults(ctx.context, req);
+		const result: any = await ctx.queue.producer.waitResults(
+			ctx.logContext,
+			req,
+		);
 		expect(result.error).toBe(false);
 		assert(result.data);
 		await ctx.flushAll(session);
-		const contract = (await ctx.jellyfish.getCardById(
-			ctx.context,
+		const contract = (await ctx.kernel.getCardById(
+			ctx.logContext,
 			ctx.session,
 			result.data.id,
 		)) as Contract;
@@ -526,7 +522,7 @@ export const before = async (
 		inverseVerb: string,
 	) => {
 		const inserted = await ctx.worker.insertCard(
-			ctx.context,
+			ctx.logContext,
 			session,
 			ctx.worker.typeContracts['link@1.0.0'],
 			{
@@ -560,8 +556,8 @@ export const before = async (
 		assert(inserted);
 		await ctx.flushAll(session);
 
-		const link = await ctx.jellyfish.getCardById(
-			ctx.context,
+		const link = await ctx.kernel.getCardById(
+			ctx.logContext,
 			ctx.session,
 			inserted.id,
 		);
@@ -614,7 +610,7 @@ export const before = async (
 		markers = [],
 	) => {
 		const inserted = await ctx.worker.insertCard(
-			ctx.context,
+			ctx.logContext,
 			session,
 			ctx.worker.typeContracts[type],
 			{
@@ -634,8 +630,8 @@ export const before = async (
 		assert(inserted);
 		await ctx.flushAll(session);
 
-		const contract = await ctx.jellyfish.getCardById(
-			ctx.context,
+		const contract = await ctx.kernel.getCardById(
+			ctx.logContext,
 			ctx.session,
 			inserted.id,
 		);
@@ -646,16 +642,14 @@ export const before = async (
 	const ctx: IntegrationTestContext = {
 		actionLibrary,
 		actor: actorContract,
-		backend,
+		kernel,
 		cache: testCache,
-		context,
+		logContext,
 		dequeue,
 		flush,
 		flushAll,
 		generateRandomID,
 		generateRandomSlug,
-		// TS-TODO: fix this casting
-		jellyfish,
 		processAction,
 		queue: testQueue,
 		session: adminSessionToken,
@@ -677,22 +671,10 @@ export const before = async (
 };
 
 export const after = async (ctx: IntegrationTestContext) => {
-	if (ctx.queue) {
-		await ctx.queue.consumer.cancel();
-	}
+	await ctx.queue.consumer.cancel();
 
-	if (ctx.jellyfish) {
-		await ctx.backend.drop(new CoreContext(ctx.context));
-		await ctx.jellyfish.disconnect(ctx.context);
-		/*
-		 * We can just disconnect and not destroy the whole
-		 * database as test databases are destroyed before
-		 * the next test run anyways.
-		 */
-		await ctx.backend.disconnect(new CoreContext(ctx.context));
+	await ctx.kernel.drop(ctx.logContext);
+	await ctx.kernel.disconnect(ctx.logContext);
 
-		if (ctx.cache) {
-			await ctx.cache.disconnect();
-		}
-	}
+	await ctx.cache.disconnect();
 };

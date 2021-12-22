@@ -1,9 +1,9 @@
-import padStart from 'lodash/padStart';
+import bodyParser from 'body-parser';
 import express from 'express';
 import fs from 'fs';
-import path from 'path';
+import { padStart } from 'lodash';
 import morgan from 'morgan';
-import bodyParser from 'body-parser';
+import path from 'path';
 
 export function setup() {
 	const outputDirectory = process.cwd();
