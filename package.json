@@ -43,7 +43,7 @@
   "author": "Balena.io. <hello@balena.io>",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@balena/jellyfish-core": "^10.2.0",
+    "@balena/jellyfish-core": "^10.2.1",
     "@balena/jellyfish-environment": "^6.0.4",
     "@balena/jellyfish-logger": "^4.0.5",
     "@balena/jellyfish-plugin-base": "^2.2.7",
