@@ -1,5 +1,6 @@
 import { strict as assert } from 'assert';
 import type { Contract } from '@balena/jellyfish-types/build/core';
+import type { ExecuteContract } from '@balena/jellyfish-types/build/queue';
 import {
 	clone,
 	cloneDeep,
@@ -33,6 +34,7 @@ import type {
 } from '../../types';
 import { insertCards, loadPlugins, PermutationCombination } from '../utils';
 import { worker } from '../worker/helpers';
+import { JellyfishPluginConstructor } from '@balena/jellyfish-plugin-base';
 
 const TRANSLATE_PREFIX = uuidv4();
 
@@ -203,7 +205,7 @@ export async function webhookScenario(
 			request,
 		);
 		assert.ok(result.error === false);
-		cards.push(...result.data);
+		cards.push(...(result.data as ExecuteContract[]));
 	}
 
 	if (!testCase.expected.head) {
@@ -218,10 +220,11 @@ export async function webhookScenario(
 		context.session,
 		cards[testCase.headIndex].id,
 	);
+	assert(head);
 
 	// TODO: Remove once we fully support versioned
 	// slug references in the sync module.
-	if (!head.type.includes('@')) {
+	if (head.type.includes('@')) {
 		head.type = `${head.type}@1.0.0`;
 	}
 
@@ -421,29 +424,29 @@ export function getObjDifference(expected: any, obtained: any): string[] {
  * @summary Tasks to execute before a test suite
  * @function
  *
- * @param context - test context
  * @param plugins - Jellyfish plugins to load
  * @param cards - list of contracts
  */
 export async function before(
-	context: TestContext,
-	plugins: any[] = [],
+	pluginConstructors: JellyfishPluginConstructor[] = [],
 	cards: any[] = [],
 ): Promise<TestContext> {
-	loadPlugins(context, plugins);
-
+	const plugins = loadPlugins(pluginConstructors);
 	const context = await worker.before({
+		plugins,
 		suffix: TRANSLATE_PREFIX,
 	});
 
+	/*
 	const syncContext = context.logContext.sync.getActionContext(
 		'test',
 		context.worker.getActionContext(context.logContext),
 		context.logContext,
 		context.session,
 	);
+	*/
 
-	await insertCards(context, context.session, context.plugins.cards, [
+	await insertCards(context, context.session, plugins.cards, [
 		'external-event',
 		'action-integration-import-event',
 		...cards,
@@ -451,6 +454,8 @@ export async function before(
 
 	nock.cleanAll();
 	nock.disableNetConnect();
+
+	return context;
 }
 
 /**
@@ -479,11 +484,12 @@ export async function afterEach(context: TestContext): Promise<void> {
  * @function
  *
  * @param context - test context
+ *
+ * TODO: Try and drop this entirely if possible
  */
 export async function restore(context: TestContext): Promise<void> {
 	await context.kernel.reset(context.logContext);
-	// TODO: Should avoid this level of manual manipulation of the backend
-	await context.kernel.backend.connection.any(
+	await context.kernel.backend.connection!.any(
 		'INSERT INTO cards SELECT * FROM cards_copy',
 	);
 }
@@ -493,9 +499,11 @@ export async function restore(context: TestContext): Promise<void> {
  * @function
  *
  * @param context - test context
+ *
+ * TODO: Try and drop this entirely if possible
  */
 export async function save(context: TestContext): Promise<void> {
-	await context.kernel.backend.connection.any(
+	await context.kernel.backend.connection!.any(
 		'CREATE TABLE cards_copy AS TABLE cards',
 	);
 }
@@ -518,7 +526,7 @@ function getTestCaseOptions(
 			{
 				context: context.logContext,
 				session: context.session,
-				actor: context.actor.id,
+				actor: context.sessionActor.id,
 			},
 			suite.options,
 		),
@@ -533,10 +541,10 @@ function getTestCaseOptions(
  * @param suite - test suite
  */
 export async function run(tester: Tester, suite: TestSuite): Promise<void> {
-	let context: TestContext | null = null;
+	let context: TestContext;
 
 	tester.before(async () => {
-		context = await before(context, suite.plugins, suite.cards);
+		context = await before(suite.plugins, suite.cards);
 		if (suite.before) {
 			suite.before(context);
 		}
@@ -554,7 +562,6 @@ export async function run(tester: Tester, suite: TestSuite): Promise<void> {
 			suite.after(context);
 		}
 		await after(context);
-		context = null;
 	});
 
 	tester.afterEach(async () => {

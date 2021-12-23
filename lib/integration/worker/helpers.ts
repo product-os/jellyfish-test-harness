@@ -3,6 +3,7 @@ import {
 	Consumer,
 	errors as queueErrors,
 	Producer,
+	ProducerResults,
 } from '@balena/jellyfish-queue';
 import { Sync } from '@balena/jellyfish-sync';
 import type {
@@ -14,25 +15,29 @@ import errio from 'errio';
 import { v4 as uuidv4 } from 'uuid';
 import * as backendHelpers from '../backend-helpers';
 import type { ActionRequest, SetupOptions, TestContext } from '../../types';
-import { insertCards } from '../utils';
+import { insertCards, loadPlugins } from '../utils';
+import { strict as assert } from 'assert';
 
-async function runBefore(options?: SetupOptions): Promise<TestContext> {
+async function runBefore(options: SetupOptions): Promise<TestContext> {
 	const backendContext = await backendHelpers.before(options);
 	const session = backendContext.kernel.sessions!.admin;
+	const plugins = loadPlugins(options.plugins);
 
 	const sessionCard = await backendContext.kernel.getCardById<SessionContract>(
 		backendContext.logContext,
 		session,
 		session,
 	);
+	assert(sessionCard);
 
 	const sessionActor = await backendContext.kernel.getCardById<UserContract>(
 		backendContext.logContext,
 		session,
-		sessionCard!.data.actor,
+		sessionCard.data.actor,
 	);
+	assert(sessionActor);
 
-	const integrations = options.plugins.syncIntegrations;
+	const integrations = plugins.syncIntegrations;
 	backendContext.logContext.sync = new Sync({
 		integrations,
 	});
@@ -47,12 +52,7 @@ async function runBefore(options?: SetupOptions): Promise<TestContext> {
 		'action-update-card',
 		'action-delete-card',
 	];
-	await insertCards(
-		backendContext,
-		session,
-		options.plugins.cards,
-		cardsToInsert,
-	);
+	await insertCards(backendContext, session, plugins.cards, cardsToInsert);
 
 	const queueActor = uuidv4();
 	const consumedActionRequests: ActionRequest[] = [];
@@ -63,17 +63,19 @@ async function runBefore(options?: SetupOptions): Promise<TestContext> {
 		(actionRequest: ActionRequest) => {
 			consumedActionRequests.push(actionRequest);
 
-			return new Promise(null);
+			return new Promise((resolve) => {
+				resolve(undefined);
+			});
 		},
 	);
 
 	const queueProducer = new Producer(backendContext.kernel, session);
 	await queueProducer.initialize(backendContext.logContext);
 
-	const dequeue = async (times = 50) => {
+	const dequeue = async (times = 50): Promise<ActionRequest | null> => {
 		for (let i = 0; i < times; i++) {
 			if (consumedActionRequests.length > 0) {
-				return consumedActionRequests.shift();
+				return consumedActionRequests.shift() || null;
 			}
 		}
 
@@ -89,8 +91,18 @@ async function runBefore(options?: SetupOptions): Promise<TestContext> {
 		flushAll: async (_ssn: string) => {
 			/* empty */
 		},
-		processAction: async (_session: string, _action: ActionRequest) => {
-			/* empty */
+		processAction: async (
+			_session: string,
+			_action: ActionRequest,
+		): Promise<ProducerResults> => {
+			return new Promise((resolve) => {
+				const result: ProducerResults = {
+					error: false,
+					timestamp: Date.now().toString(),
+					data: {},
+				};
+				resolve(result);
+			});
 		},
 		queue: {
 			actor: queueActor,
@@ -114,8 +126,8 @@ async function after(context: TestContext): Promise<void> {
 }
 
 export const jellyfish = {
-	before: async () => {
-		const context = await runBefore();
+	before: async (options: SetupOptions) => {
+		const context = await runBefore(options);
 		await insertCards(
 			context,
 			context.session,
@@ -135,15 +147,17 @@ export const jellyfish = {
 };
 
 export const worker = {
-	before: async (options: SetupOptions) => {
-		const context = await runBefore({
-			suffix: options.suffix,
-		});
+	before: async (options: SetupOptions): Promise<TestContext> => {
+		const context = await runBefore(options);
+		const plugins = loadPlugins(options.plugins);
 
+		context.logContext.sync = new Sync({
+			integrations: plugins.syncIntegrations,
+		});
 		context.worker = new Worker(
 			context.kernel,
 			context.session,
-			options.plugins.actions,
+			plugins.actions!,
 			context.queue.consumer,
 			context.queue.producer,
 		);
@@ -195,6 +209,8 @@ export const worker = {
 				createRequest,
 			);
 		};
+
+		return context;
 	},
 	after,
 };

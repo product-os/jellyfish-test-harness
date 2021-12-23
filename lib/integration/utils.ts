@@ -6,30 +6,27 @@ import type { JellyfishPluginConstructor } from '@balena/jellyfish-plugin-base';
 import type { Contract } from '@balena/jellyfish-types/build/core';
 import combinatorics from 'js-combinatorics/commonjs/combinatorics';
 import { v4 as uuidv4 } from 'uuid';
-import type { BackendTestContext, TestContext } from '../types';
+import type { BackendTestContext } from '../types';
 
 /**
  * @summary Load Jellyfish plugins.
  * @function
  *
- * @param context - test context
- * @param plugins - Jellyfish plugin constructors
+ * @param pluginConstructors - Jellyfish plugin constructors
  */
 export function loadPlugins(
-	context: TestContext,
-	plugins: JellyfishPluginConstructor[],
-): void {
-	if (context.plugins) {
-		return;
-	}
-
-	const pluginManager = new PluginManager(context.context, {
-		plugins: plugins || [],
+	pluginConstructors: JellyfishPluginConstructor[],
+): any {
+	const context = {
+		id: `test-harness-${uuidv4()}`,
+	};
+	const pluginManager = new PluginManager(context, {
+		plugins: pluginConstructors || [],
 	});
-	context.plugins = {
-		cards: pluginManager.getCards(context.context, coreMixins),
-		actions: pluginManager.getActions(context.context),
-		syncIntegrations: pluginManager.getSyncIntegrations(context.context),
+	return {
+		cards: pluginManager.getCards(context, coreMixins),
+		actions: pluginManager.getActions(context),
+		syncIntegrations: pluginManager.getSyncIntegrations(context),
 	};
 }
 

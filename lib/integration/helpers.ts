@@ -136,11 +136,10 @@ export interface IntegrationTestContext {
 }
 
 export const before = async (
-	plugins: any[],
-	options: SetupOptions = {},
+	options: SetupOptions,
 ): Promise<IntegrationTestContext> => {
 	const pluginManager = new PluginManager(pluginLogContext, {
-		plugins,
+		plugins: options.plugins,
 	});
 
 	const suffix = options.suffix || generateRandomID();

@@ -1,14 +1,15 @@
 import type { CoreKernel, MemoryCache } from '@balena/jellyfish-core';
 import type { LogContext } from '@balena/jellyfish-logger';
-import type { ActionFile } from '@balena/jellyfish-plugin-base';
-import type { IntegrationConstructor } from '@balena/jellyfish-sync';
+import type {
+	ActionFile,
+	JellyfishPluginConstructor,
+} from '@balena/jellyfish-plugin-base';
 import type {
 	Consumer,
 	Producer,
 	ProducerResults,
 } from '@balena/jellyfish-queue';
 import type {
-	Contract,
 	ContractDefinition,
 	UserContract,
 } from '@balena/jellyfish-types/build/core';
@@ -53,13 +54,7 @@ export interface ActionRequest {
 
 // TS-TODO: Use proper type for worker
 export interface SetupOptions {
-	plugins?: {
-		actions?: ActionLibrary;
-		cards?: Contract[];
-		syncIntegrations?: {
-			[key: string]: IntegrationConstructor;
-		};
-	};
+	plugins: JellyfishPluginConstructor[];
 	suffix?: string;
 	skipConnect?: boolean;
 	cards?: ContractDefinition[];
@@ -80,6 +75,15 @@ export interface Tester {
 	test: (title: string, fn: () => Promise<void>) => void;
 }
 
+export interface TestSuiteOptions {
+	token?: any;
+	head?: {
+		ignore: {
+			[key: string]: string[];
+		};
+	};
+}
+
 export interface TestSuite {
 	basePath: string;
 	plugins: any[];
@@ -95,14 +99,7 @@ export interface TestSuite {
 	stubRegex: object;
 	source: string;
 	isAuthorized: any;
-	options?: {
-		token?: any;
-		head?: {
-			ignore: {
-				[key: string]: string[];
-			};
-		};
-	};
+	options?: TestSuiteOptions;
 	before?: (context: TestContext) => void;
 	beforeEach?: (context: TestContext) => void;
 	after?: (context: TestContext) => void;
@@ -114,9 +111,7 @@ export interface TestSuite {
 export interface TestCaseOptions {
 	constructor: any;
 	source: string;
-	options: {
-		context: TestContext;
-	};
+	options: TestSuiteOptions;
 }
 
 export interface ActionLibrary {
