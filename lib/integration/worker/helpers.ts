@@ -1,39 +1,44 @@
-// tslint:disable: no-var-requires
+import { coreErrors } from '@balena/jellyfish-core';
+import {
+	Consumer,
+	errors as queueErrors,
+	Producer,
+	ProducerResults,
+} from '@balena/jellyfish-queue';
+import { Sync } from '@balena/jellyfish-sync';
+import type {
+	SessionContract,
+	UserContract,
+} from '@balena/jellyfish-types/build/core';
+import { CARDS as workerCards, Worker } from '@balena/jellyfish-worker';
+import errio from 'errio';
 import { v4 as uuidv4 } from 'uuid';
+import * as backendHelpers from '../backend-helpers';
 import type { ActionRequest, SetupOptions, TestContext } from '../../types';
-import * as helpers from '../backend-helpers';
-import { generateRandomID, generateRandomSlug, insertCards } from '../utils';
+import { insertCards, loadPlugins } from '../utils';
+import { strict as assert } from 'assert';
 
-const Consumer = require('@balena/jellyfish-queue').Consumer;
-const Producer = require('@balena/jellyfish-queue').Producer;
-const Worker = require('@balena/jellyfish-worker').Worker;
-const Sync = require('@balena/jellyfish-sync').Sync;
-const queueErrors = require('@balena/jellyfish-queue').errors;
-const errio = require('errio');
+async function runBefore(options: SetupOptions): Promise<TestContext> {
+	const backendContext = await backendHelpers.before(options);
+	const session = backendContext.kernel.sessions!.admin;
+	const plugins = loadPlugins(options.plugins);
 
-async function runBefore(
-	context: TestContext,
-	options: SetupOptions,
-): Promise<void> {
-	const integrations = context.plugins.syncIntegrations;
-
-	await helpers.before(context, options);
-	context.jellyfish = context.kernel;
-	context.session = context.jellyfish.sessions.admin;
-
-	const session = await context.jellyfish.getCardById(
-		context.context,
-		context.session,
-		context.session,
+	const sessionCard = await backendContext.kernel.getCardById<SessionContract>(
+		backendContext.logContext,
+		session,
+		session,
 	);
+	assert(sessionCard);
 
-	context.actor = await context.jellyfish.getCardById(
-		context.context,
-		context.session,
-		session.data.actor,
+	const sessionActor = await backendContext.kernel.getCardById<UserContract>(
+		backendContext.logContext,
+		session,
+		sessionCard.data.actor,
 	);
+	assert(sessionActor);
 
-	context.context.sync = new Sync({
+	const integrations = plugins.syncIntegrations;
+	backendContext.logContext.sync = new Sync({
 		integrations,
 	});
 
@@ -47,45 +52,66 @@ async function runBefore(
 		'action-update-card',
 		'action-delete-card',
 	];
+	await insertCards(backendContext, session, plugins.cards, cardsToInsert);
 
-	await insertCards(context, context.plugins.cards, cardsToInsert);
-
-	context.queue = {};
-	context.queue.errors = queueErrors;
-
-	context.queue.consumer = new Consumer(context.jellyfish, context.session);
-
+	const queueActor = uuidv4();
 	const consumedActionRequests: ActionRequest[] = [];
 
-	await context.queue.consumer.initializeWithEventHandler(
-		context.context,
+	const queueConsumer = new Consumer(backendContext.kernel, session);
+	await queueConsumer.initializeWithEventHandler(
+		backendContext.logContext,
 		(actionRequest: ActionRequest) => {
 			consumedActionRequests.push(actionRequest);
+
+			return new Promise((resolve) => {
+				resolve(undefined);
+			});
 		},
 	);
 
-	context.queueActor = uuidv4();
+	const queueProducer = new Producer(backendContext.kernel, session);
+	await queueProducer.initialize(backendContext.logContext);
 
-	context.dequeue = async (times = 50) => {
-		if (consumedActionRequests.length === 0) {
-			if (times <= 0) {
-				return null;
+	const dequeue = async (times = 50): Promise<ActionRequest | null> => {
+		for (let i = 0; i < times; i++) {
+			if (consumedActionRequests.length > 0) {
+				return consumedActionRequests.shift() || null;
 			}
-
-			await new Promise((resolve) => {
-				setTimeout(resolve, 10);
-			});
-			return context.dequeue(times - 1);
 		}
 
-		return consumedActionRequests.shift();
+		return null;
 	};
 
-	context.queue.producer = new Producer(context.jellyfish, context.session);
-
-	await context.queue.producer.initialize(context.context);
-	context.generateRandomSlug = generateRandomSlug;
-	context.generateRandomID = generateRandomID;
+	return {
+		session,
+		sessionActor,
+		flush: async (_session: string) => {
+			/* empty */
+		},
+		flushAll: async (_ssn: string) => {
+			/* empty */
+		},
+		processAction: async (
+			_session: string,
+			_action: ActionRequest,
+		): Promise<ProducerResults> => {
+			return new Promise((resolve) => {
+				const result: ProducerResults = {
+					error: false,
+					timestamp: Date.now().toString(),
+					data: {},
+				};
+				resolve(result);
+			});
+		},
+		queue: {
+			actor: queueActor,
+			consumer: queueConsumer,
+			producer: queueProducer,
+		},
+		dequeue,
+		...backendContext,
+	};
 }
 
 /**
@@ -95,48 +121,47 @@ async function runBefore(
  * @param context - test context
  */
 async function after(context: TestContext): Promise<void> {
-	if (context.queue) {
-		await context.queue.consumer.cancel();
-	}
-
-	if (context.jellyfish) {
-		await helpers.after(context);
-	}
+	await context.queue.consumer.cancel();
+	await backendHelpers.after(context);
 }
 
 export const jellyfish = {
-	before: async (context: TestContext) => {
-		await runBefore(context, {
-			suffix: '',
-		});
+	before: async (options: SetupOptions) => {
+		const context = await runBefore(options);
+		await insertCards(
+			context,
+			context.session,
+			// TODO: remove these anys by fixing the worker
+			workerCards as any,
+			[
+				workerCards.update,
+				workerCards.create as any,
+				workerCards['triggered-action'],
+			],
+		);
 
-		const workerCards = require('@balena/jellyfish-worker').CARDS;
-		await insertCards(context, workerCards, [
-			workerCards.update,
-			workerCards.create,
-			workerCards['triggered-action'],
-		]);
+		return context;
 	},
 
-	after: async (context: TestContext) => {
-		await after(context);
-	},
+	after,
 };
 
 export const worker = {
-	before: async (context: TestContext, options: SetupOptions) => {
-		await runBefore(context, {
-			suffix: options.suffix,
-		});
+	before: async (options: SetupOptions): Promise<TestContext> => {
+		const context = await runBefore(options);
+		const plugins = loadPlugins(options.plugins);
 
+		context.logContext.sync = new Sync({
+			integrations: plugins.syncIntegrations,
+		});
 		context.worker = new Worker(
-			context.jellyfish,
+			context.kernel,
 			context.session,
-			context.plugins.actions,
+			plugins.actions!,
 			context.queue.consumer,
 			context.queue.producer,
 		);
-		await context.worker.initialize(context.context);
+		await context.worker.initialize(context.logContext);
 
 		context.flush = async (session: string) => {
 			const request = await context.dequeue();
@@ -150,8 +175,8 @@ export const worker = {
 			if (result.error) {
 				const Constructor =
 					context.worker.errors[result.data.name] ||
-					context.queue.errors[result.data.name] ||
-					context.jellyfish.errors[result.data.name] ||
+					queueErrors[result.data.name] ||
+					coreErrors[result.data.name] ||
 					Error;
 
 				const error = new Constructor(result.data.message);
@@ -167,7 +192,6 @@ export const worker = {
 				}
 			} catch {
 				// Once an error is thrown, there are no more requests to dequeue
-				return;
 			}
 		};
 
@@ -175,11 +199,18 @@ export const worker = {
 			const createRequest = await context.queue.producer.enqueue(
 				context.worker.getId(),
 				session,
-				action,
+				// TODO: typing
+				action as any,
 			);
 			await context.flushAll(session);
-			return context.queue.producer.waitResults(context, createRequest);
+
+			return context.queue.producer.waitResults(
+				context.logContext,
+				createRequest,
+			);
 		};
+
+		return context;
 	},
 	after,
 };

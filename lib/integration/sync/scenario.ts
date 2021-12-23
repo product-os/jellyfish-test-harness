@@ -1,28 +1,30 @@
-import type { Contract } from '@balena/jellyfish-types/build/core';
 import { strict as assert } from 'assert';
-import clone from 'lodash/clone';
-import cloneDeep from 'lodash/cloneDeep';
-import compact from 'lodash/compact';
-import difference from 'lodash/difference';
-import each from 'lodash/each';
-import filter from 'lodash/filter';
-import findIndex from 'lodash/findIndex';
-import first from 'lodash/first';
-import get from 'lodash/get';
-import includes from 'lodash/includes';
-import isEqual from 'lodash/isEqual';
-import kebabCase from 'lodash/kebabCase';
-import keys from 'lodash/keys';
-import last from 'lodash/last';
-import map from 'lodash/map';
-import merge from 'lodash/merge';
-import partial from 'lodash/partial';
-import pick from 'lodash/pick';
-import sortBy from 'lodash/sortBy';
+import type { Contract } from '@balena/jellyfish-types/build/core';
+import type { ExecuteContract } from '@balena/jellyfish-types/build/queue';
+import {
+	clone,
+	cloneDeep,
+	compact,
+	difference,
+	each,
+	filter,
+	findIndex,
+	first,
+	get,
+	includes,
+	isEqual,
+	kebabCase,
+	keys,
+	last,
+	map,
+	merge,
+	partial,
+	pick,
+	sortBy,
+} from 'lodash';
 import nock from 'nock';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-
 import type {
 	TestContext,
 	TestCaseOptions,
@@ -32,6 +34,7 @@ import type {
 } from '../../types';
 import { insertCards, loadPlugins, PermutationCombination } from '../utils';
 import { worker } from '../worker/helpers';
+import { JellyfishPluginConstructor } from '@balena/jellyfish-plugin-base';
 
 const TRANSLATE_PREFIX = uuidv4();
 
@@ -171,8 +174,8 @@ export async function webhookScenario(
 			payload: step.payload,
 		};
 
-		const event = await context.jellyfish.insertCard(
-			context.context,
+		const event = await context.kernel.insertCard(
+			context.logContext,
 			context.session,
 			{
 				type: 'external-event@1.0.0',
@@ -188,7 +191,7 @@ export async function webhookScenario(
 			context.worker.getId(),
 			context.session,
 			{
-				context: context.context,
+				logContext: context.logContext,
 				action: 'action-integration-import-event@1.0.0',
 				card: event.id,
 				type: event.type,
@@ -198,11 +201,11 @@ export async function webhookScenario(
 
 		await context.flush(context.session);
 		const result = await context.queue.producer.waitResults(
-			context.context,
+			context.logContext,
 			request,
 		);
 		assert.ok(result.error === false);
-		cards.push(...result.data);
+		cards.push(...(result.data as ExecuteContract[]));
 	}
 
 	if (!testCase.expected.head) {
@@ -212,18 +215,16 @@ export async function webhookScenario(
 
 	assert.ok(cards.length > 0);
 
-	const head = await context.jellyfish.getCardById(
-		context.context,
+	const head = await context.kernel.getCardById(
+		context.logContext,
 		context.session,
 		cards[testCase.headIndex].id,
-		{
-			type: cards[testCase.headIndex].type,
-		},
 	);
+	assert(head);
 
 	// TODO: Remove once we fully support versioned
 	// slug references in the sync module.
-	if (!head.type.includes('@')) {
+	if (head.type.includes('@')) {
 		head.type = `${head.type}@1.0.0`;
 	}
 
@@ -232,8 +233,8 @@ export async function webhookScenario(
 	Reflect.deleteProperty(head.data, 'origin');
 	Reflect.deleteProperty(head.data, 'translateDate');
 
-	const timeline = await context.jellyfish.query(
-		context.context,
+	const timeline = await context.kernel.query(
+		context.logContext,
 		context.session,
 		{
 			type: 'object',
@@ -309,8 +310,8 @@ export async function webhookScenario(
 				card.type = `${card.type}@1.0.0`;
 			}
 
-			const actorCard = await context.jellyfish.getCardById(
-				context.context,
+			const actorCard = await context.kernel.getCardById(
+				context.logContext,
 				context.session,
 				card.data.actor,
 			);
@@ -423,29 +424,29 @@ export function getObjDifference(expected: any, obtained: any): string[] {
  * @summary Tasks to execute before a test suite
  * @function
  *
- * @param context - test context
  * @param plugins - Jellyfish plugins to load
  * @param cards - list of contracts
  */
 export async function before(
-	context: TestContext,
-	plugins: any[] = [],
+	pluginConstructors: JellyfishPluginConstructor[] = [],
 	cards: any[] = [],
-): Promise<void> {
-	loadPlugins(context, plugins);
-
-	await worker.before(context, {
+): Promise<TestContext> {
+	const plugins = loadPlugins(pluginConstructors);
+	const context = await worker.before({
+		plugins,
 		suffix: TRANSLATE_PREFIX,
 	});
 
-	context.syncContext = context.context.sync.getActionContext(
+	/*
+	const syncContext = context.logContext.sync.getActionContext(
 		'test',
-		context.worker.getActionContext(context.context),
-		context.context,
+		context.worker.getActionContext(context.logContext),
+		context.logContext,
 		context.session,
 	);
+	*/
 
-	await insertCards(context, context.plugins.cards, [
+	await insertCards(context, context.session, plugins.cards, [
 		'external-event',
 		'action-integration-import-event',
 		...cards,
@@ -453,6 +454,8 @@ export async function before(
 
 	nock.cleanAll();
 	nock.disableNetConnect();
+
+	return context;
 }
 
 /**
@@ -481,12 +484,12 @@ export async function afterEach(context: TestContext): Promise<void> {
  * @function
  *
  * @param context - test context
+ *
+ * TODO: Try and drop this entirely if possible
  */
 export async function restore(context: TestContext): Promise<void> {
-	// TODO: Should avoid this level of manual manipulation of the backend
-	await context.jellyfish.backend.connection.any('DELETE FROM links2');
-	await context.jellyfish.backend.connection.any('DELETE FROM cards');
-	await context.jellyfish.backend.connection.any(
+	await context.kernel.reset(context.logContext);
+	await context.kernel.backend.connection!.any(
 		'INSERT INTO cards SELECT * FROM cards_copy',
 	);
 }
@@ -496,9 +499,11 @@ export async function restore(context: TestContext): Promise<void> {
  * @function
  *
  * @param context - test context
+ *
+ * TODO: Try and drop this entirely if possible
  */
 export async function save(context: TestContext): Promise<void> {
-	await context.jellyfish.backend.connection.any(
+	await context.kernel.backend.connection!.any(
 		'CREATE TABLE cards_copy AS TABLE cards',
 	);
 }
@@ -519,9 +524,9 @@ function getTestCaseOptions(
 		source: suite.source,
 		options: Object.assign(
 			{
-				context: context.context,
+				context: context.logContext,
 				session: context.session,
-				actor: context.actor.id,
+				actor: context.sessionActor.id,
 			},
 			suite.options,
 		),
@@ -536,32 +541,32 @@ function getTestCaseOptions(
  * @param suite - test suite
  */
 export async function run(tester: Tester, suite: TestSuite): Promise<void> {
-	const context: TestContext = {};
+	let context: TestContext;
 
 	tester.before(async () => {
-		await before(context, suite.plugins, suite.cards);
+		context = await before(suite.plugins, suite.cards);
 		if (suite.before) {
-			await suite.before(context);
+			suite.before(context);
 		}
 		await save(context);
 	});
 
 	tester.beforeEach(async () => {
 		if (suite.beforeEach) {
-			await suite.beforeEach(context);
+			suite.beforeEach(context);
 		}
 	});
 
 	tester.after(async () => {
 		if (suite.after) {
-			await suite.after(context);
+			suite.after(context);
 		}
 		await after(context);
 	});
 
 	tester.afterEach(async () => {
 		if (suite.afterEach) {
-			await suite.afterEach(context);
+			suite.afterEach(context);
 		}
 		await afterEach(context);
 	});
@@ -597,7 +602,7 @@ export async function run(tester: Tester, suite: TestSuite): Promise<void> {
 
 			tester.test(`(${variation.name}) ${testCaseName}`, async () => {
 				if (suite.pre) {
-					await suite.pre(context);
+					suite.pre(context);
 				}
 
 				await webhookScenario(

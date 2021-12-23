@@ -1,9 +1,51 @@
-import type { ActionFile } from '@balena/jellyfish-plugin-base';
-import type { ContractDefinition } from '@balena/jellyfish-types/build/core';
+import type { CoreKernel, MemoryCache } from '@balena/jellyfish-core';
+import type { LogContext } from '@balena/jellyfish-logger';
+import type {
+	ActionFile,
+	JellyfishPluginConstructor,
+} from '@balena/jellyfish-plugin-base';
+import type {
+	Consumer,
+	Producer,
+	ProducerResults,
+} from '@balena/jellyfish-queue';
+import type {
+	ContractDefinition,
+	UserContract,
+} from '@balena/jellyfish-types/build/core';
 import type { Action } from '@balena/jellyfish-types/build/worker';
+import type { RandomSlugOptions } from './integration/utils';
+
+export interface BackendTestContext {
+	kernel: CoreKernel;
+	logContext: LogContext;
+	cache: MemoryCache;
+	generateRandomSlug: (options: RandomSlugOptions) => string;
+	generateRandomID: () => string;
+}
 
 export interface TestContext {
-	[key: string]: any;
+	session: string;
+	sessionActor: UserContract;
+	// TODO: proper type
+	worker?: any;
+	flush: (session: string) => Promise<void>;
+	flushAll: (ssn: string) => Promise<void>;
+	processAction: (
+		session: string,
+		action: ActionRequest,
+	) => Promise<ProducerResults>;
+	queue: {
+		actor: string;
+		consumer: Consumer;
+		producer: Producer;
+	};
+	dequeue: (times?: number) => Promise<ActionRequest | null>;
+	kernel: CoreKernel;
+	logContext: LogContext;
+	cache: MemoryCache;
+	generateRandomSlug: (options: RandomSlugOptions) => string;
+	generateRandomID: () => string;
 }
 
 export interface ActionRequest {
@@ -12,6 +54,7 @@ export interface ActionRequest {
 
 // TS-TODO: Use proper type for worker
 export interface SetupOptions {
+	plugins: JellyfishPluginConstructor[];
 	suffix?: string;
 	skipConnect?: boolean;
 	cards?: ContractDefinition[];
@@ -32,6 +75,15 @@ export interface Tester {
 	test: (title: string, fn: () => Promise<void>) => void;
 }
 
+export interface TestSuiteOptions {
+	token?: any;
+	head?: {
+		ignore: {
+			[key: string]: string[];
+		};
+	};
+}
+
 export interface TestSuite {
 	basePath: string;
 	plugins: any[];
@@ -47,14 +99,7 @@ export interface TestSuite {
 	stubRegex: object;
 	source: string;
 	isAuthorized: any;
-	options?: {
-		token?: any;
-		head?: {
-			ignore: {
-				[key: string]: string[];
-			};
-		};
-	};
+	options?: TestSuiteOptions;
 	before?: (context: TestContext) => void;
 	beforeEach?: (context: TestContext) => void;
 	after?: (context: TestContext) => void;
@@ -66,9 +111,7 @@ export interface TestSuite {
 export interface TestCaseOptions {
 	constructor: any;
 	source: string;
-	options: {
-		context: TestContext;
-	};
+	options: TestSuiteOptions;
 }
 
 export interface ActionLibrary {

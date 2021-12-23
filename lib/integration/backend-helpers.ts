@@ -1,105 +1,54 @@
 // TODO: Remove in favor of helpers.ts
-import { Context } from '@balena/jellyfish-core/build/context';
+import * as core from '@balena/jellyfish-core';
+import { MemoryCache } from '@balena/jellyfish-core';
 import { defaultEnvironment } from '@balena/jellyfish-environment';
 import { v4 as uuidv4 } from 'uuid';
-import type { SetupOptions, TestContext } from '../types';
+import type { BackendTestContext, SetupOptions } from '../types';
 import { generateRandomID, generateRandomSlug } from './utils';
-
-// TODO: Make the core easier to bootstrap!
-import {
-	Backend,
-	MemoryCache as Cache,
-	errors,
-	Kernel,
-} from '@balena/jellyfish-core';
-
-/**
- * @summary Set up backend before running tests.
- * @function
- *
- * @param context - test context
- * @param options - set up options
- */
-async function backendBefore(
-	context: TestContext,
-	options: SetupOptions,
-): Promise<void> {
-	const suffix = options.suffix ? options.suffix : uuidv4();
-	const dbName = `test_${suffix.replace(/-/g, '_')}`;
-
-	context.cache = new Cache(
-		Object.assign({}, defaultEnvironment.redis, {
-			namespace: dbName,
-		} as any),
-	);
-
-	context.context = {
-		id: `CORE-TEST-${uuidv4()}`,
-	};
-
-	if (context.cache) {
-		await context.cache.connect(context.context);
-	}
-
-	context.backend = new Backend(
-		context.cache,
-		errors,
-		Object.assign({}, defaultEnvironment.database.options, {
-			database: dbName,
-		}),
-	);
-
-	if (options.skipConnect) {
-		return;
-	}
-
-	await context.backend.connect(new Context(context.context));
-}
-
-/**
- * @summary Clean up backend after tests complete
- * @function
- *
- * @param context - test context
- */
-async function backendAfter(context: TestContext): Promise<void> {
-	/*
-	 * We can just disconnect and not destroy the whole
-	 * database as test databases are destroyed before
-	 * the next test run anyways.
-	 */
-	await context.backend.disconnect(new Context(context.context));
-
-	if (context.cache) {
-		await context.cache.disconnect();
-	}
-}
 
 /**
  * @summary Work to execute before running tests
  * @function
  *
- * @param context - test context
  * @param options - set up options
  */
 export async function before(
-	context: TestContext,
 	options: SetupOptions,
-): Promise<void> {
-	await backendBefore(context, {
-		skipConnect: true,
-		suffix: options.suffix,
-	});
+): Promise<BackendTestContext> {
+	const suffix = options.suffix ? options.suffix : uuidv4();
+	const dbName = `test_${suffix.replace(/-/g, '_')}`;
+
+	const cache = new MemoryCache(
+		Object.assign({}, defaultEnvironment.redis, {
+			namespace: dbName,
+		} as any),
+	);
+	await cache.connect();
+
+	const logContext = {
+		id: `CORE-TEST-${uuidv4()}`,
+	};
+
+	const kernel = await core.create(
+		logContext,
+		cache,
+		Object.assign({}, defaultEnvironment.database.options, {
+			database: dbName,
+		}),
+	);
+	await kernel.initialize(logContext);
 
 	if (options.suffix) {
-		await context.backend.connect(new Context(context.context));
-		await context.backend.reset(new Context(context.context));
+		await kernel.reset(logContext);
 	}
 
-	context.kernel = new Kernel(context.backend);
-	await context.kernel.initialize(context.context);
-	context.generateRandomSlug = generateRandomSlug;
-	context.generateRandomID = generateRandomID;
+	return {
+		cache,
+		logContext,
+		kernel,
+		generateRandomSlug,
+		generateRandomID,
+	};
 }
 
 /**
@@ -108,8 +57,8 @@ export async function before(
  *
  * @param context - test context
  */
-export async function after(context: TestContext): Promise<void> {
-	await context.backend.drop(new Context(context.context));
-	await context.kernel.disconnect(new Context(context.context));
-	await backendAfter(context);
+export async function after(context: BackendTestContext) {
+	await context.kernel.drop(context.logContext);
+	await context.kernel.disconnect(context.logContext);
+	await context.cache.disconnect();
 }

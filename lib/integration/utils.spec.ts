@@ -11,7 +11,7 @@ describe('loadPlugins()', () => {
 				},
 			},
 		};
-		loadPlugins(test, []);
+		loadPlugins([]);
 		expect(test.context.plugins.cards).toEqual({});
 		expect(test.context.plugins.actions).toEqual({});
 		expect(test.context.plugins.syncIntegrations).toEqual({});

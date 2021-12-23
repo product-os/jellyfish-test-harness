@@ -3,33 +3,30 @@
 import { cardMixins as coreMixins } from '@balena/jellyfish-core';
 import { PluginManager } from '@balena/jellyfish-plugin-base';
 import type { JellyfishPluginConstructor } from '@balena/jellyfish-plugin-base';
+import type { Contract } from '@balena/jellyfish-types/build/core';
+import combinatorics from 'js-combinatorics/commonjs/combinatorics';
 import { v4 as uuidv4 } from 'uuid';
-import type { TestContext } from '../types';
-
-const combinatorics = require('js-combinatorics/commonjs/combinatorics');
+import type { BackendTestContext } from '../types';
 
 /**
  * @summary Load Jellyfish plugins.
  * @function
  *
- * @param context - test context
- * @param plugins - Jellyfish plugin constructors
+ * @param pluginConstructors - Jellyfish plugin constructors
  */
 export function loadPlugins(
-	context: TestContext,
-	plugins: JellyfishPluginConstructor[],
-): void {
-	if (context.plugins) {
-		return;
-	}
-
-	const pluginManager = new PluginManager(context.context, {
-		plugins: plugins || [],
+	pluginConstructors: JellyfishPluginConstructor[],
+): any {
+	const context = {
+		id: `test-harness-${uuidv4()}`,
+	};
+	const pluginManager = new PluginManager(context, {
+		plugins: pluginConstructors || [],
 	});
-	context.plugins = {
-		cards: pluginManager.getCards(context.context, coreMixins),
-		actions: pluginManager.getActions(context.context),
-		syncIntegrations: pluginManager.getSyncIntegrations(context.context),
+	return {
+		cards: pluginManager.getCards(context, coreMixins),
+		actions: pluginManager.getActions(context),
+		syncIntegrations: pluginManager.getSyncIntegrations(context),
 	};
 }
 
@@ -42,15 +39,16 @@ export function loadPlugins(
  * @param cardSlugs - plugin card slugs
  */
 export async function insertCards(
-	context: TestContext,
-	allCards: any,
+	context: BackendTestContext,
+	session: string,
+	allCards: Contract[],
 	cardSlugs: string[],
 ): Promise<void> {
 	await Promise.all(
 		cardSlugs.map((cardSlug: string) => {
-			return context.jellyfish.insertCard(
-				context.context,
-				context.session,
+			return context.kernel.insertCard(
+				context.logContext,
+				session,
 				allCards[cardSlug],
 			);
 		}),
@@ -71,6 +69,10 @@ export function generateRandomID(): string {
 	return uuidv4();
 }
 
+export interface RandomSlugOptions {
+	prefix: string;
+}
+
 /**
  * @summary Generate and return random slug
  * @function
@@ -82,7 +84,7 @@ export function generateRandomID(): string {
  *   const slug = generateRandomSlug();
  * ```
  */
-export function generateRandomSlug(options: any): string {
+export function generateRandomSlug(options: RandomSlugOptions): string {
 	const slug = generateRandomID();
 	if (options && options.prefix) {
 		return `${options.prefix}-${slug}`;
