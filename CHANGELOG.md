@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v9.0.1
+## (2021-12-23)
+
+* Fix an oversight in the previous PR [Carol Schulze]
+
 # v9.0.0
 ## (2021-12-23)
 
