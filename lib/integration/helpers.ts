@@ -62,7 +62,7 @@ export interface IntegrationTestContext {
 		session: string,
 		action: {
 			action: string;
-			context: any;
+			logContext: LogContext;
 			card: string;
 			type: string;
 			arguments: any;
