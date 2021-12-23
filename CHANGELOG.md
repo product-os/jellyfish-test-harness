@@ -5,6 +5,12 @@
 
 # v1.0.1
 
+# v9.0.0
+## (2021-12-23)
+
+* Fix typing issues [Josh Bowling]
+* Update dependencies, imports, and API [Carol Schulze]
+
 # v8.1.218
 ## (2021-12-22)
 
