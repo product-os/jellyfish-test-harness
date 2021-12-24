@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v9.0.6
+## (2021-12-24)
+
+* patch: Update internal-patch [Renovate Bot]
+
 # v9.0.5
 ## (2021-12-24)
 
