@@ -46,7 +46,7 @@
     "@balena/jellyfish-core": "^10.2.2",
     "@balena/jellyfish-environment": "^6.0.5",
     "@balena/jellyfish-logger": "^4.0.7",
-    "@balena/jellyfish-plugin-base": "^2.2.10",
+    "@balena/jellyfish-plugin-base": "^2.2.11",
     "@balena/jellyfish-queue": "^2.2.3",
     "@balena/jellyfish-sync": "^6.2.3",
     "@balena/jellyfish-worker": "^10.1.21",
