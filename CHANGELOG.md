@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v9.1.0
+## (2021-12-27)
+
+* Export `SetupOptions` [Carol Schulze]
+
 # v9.0.12
 ## (2021-12-25)
 
