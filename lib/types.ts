@@ -1,4 +1,4 @@
-import type { CoreKernel, MemoryCache } from '@balena/jellyfish-core';
+import type { Kernel, Cache } from '@balena/jellyfish-core';
 import type { LogContext } from '@balena/jellyfish-logger';
 import type {
 	ActionFile,
@@ -17,9 +17,9 @@ import type { Action } from '@balena/jellyfish-types/build/worker';
 import type { RandomSlugOptions } from './integration/utils';
 
 export interface BackendTestContext {
-	kernel: CoreKernel;
+	kernel: Kernel;
 	logContext: LogContext;
-	cache: MemoryCache;
+	cache: Cache;
 	generateRandomSlug: (options: RandomSlugOptions) => string;
 	generateRandomID: () => string;
 }
@@ -41,9 +41,9 @@ export interface TestContext {
 		producer: Producer;
 	};
 	dequeue: (times?: number) => Promise<ActionRequest | null>;
-	kernel: CoreKernel;
+	kernel: Kernel;
 	logContext: LogContext;
-	cache: MemoryCache;
+	cache: Cache;
 	generateRandomSlug: (options: RandomSlugOptions) => string;
 	generateRandomID: () => string;
 }

@@ -1,6 +1,5 @@
 import { strict as assert } from 'assert';
-import * as core from '@balena/jellyfish-core';
-import { cardMixins, CoreKernel, MemoryCache } from '@balena/jellyfish-core';
+import { cardMixins, Kernel, Cache } from '@balena/jellyfish-core';
 import { defaultEnvironment } from '@balena/jellyfish-environment';
 import type { LogContext } from '@balena/jellyfish-logger';
 import { PluginManager } from '@balena/jellyfish-plugin-base';
@@ -45,9 +44,9 @@ const generateRandomSlug = (options: { prefix?: string } = {}): string => {
 };
 
 export interface IntegrationTestContext {
-	cache: MemoryCache;
+	cache: Cache;
 	logContext: LogContext;
-	kernel: CoreKernel;
+	kernel: Kernel;
 	session: string;
 	actor: UserContract;
 	dequeue: (times?: number) => Promise<ActionRequestContract | null>;
@@ -149,7 +148,7 @@ export const before = async (
 		id: `CORE-TEST-${generateRandomID()}`,
 	};
 
-	const testCache = new MemoryCache(
+	const testCache = new Cache(
 		Object.assign({}, defaultEnvironment.redis, {
 			namespace: dbName,
 		}) as any,
@@ -157,7 +156,7 @@ export const before = async (
 
 	await testCache.connect();
 
-	const kernel = await core.create(
+	const kernel = await Kernel.withPostgres(
 		logContext,
 		testCache,
 		Object.assign({}, defaultEnvironment.database.options, {

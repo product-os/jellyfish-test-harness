@@ -1,4 +1,4 @@
-import { coreErrors } from '@balena/jellyfish-core';
+import { errors as coreErrors } from '@balena/jellyfish-core';
 import {
 	Consumer,
 	errors as queueErrors,
