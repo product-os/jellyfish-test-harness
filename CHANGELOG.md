@@ -5,6 +5,12 @@
 
 # v1.0.1
 
+# v9.1.1
+## (2022-01-03)
+
+* Bump jellyfish-queue and jellyfish-core [Josh Bowling]
+* patch: Update external-non-major [Renovate Bot]
+
 # v9.1.0
 ## (2021-12-27)
 
