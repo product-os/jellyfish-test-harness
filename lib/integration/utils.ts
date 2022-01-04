@@ -1,10 +1,8 @@
-// tslint:disable: no-var-requires
-
 import { cardMixins as coreMixins } from '@balena/jellyfish-core';
 import { PluginManager } from '@balena/jellyfish-plugin-base';
 import type { JellyfishPluginConstructor } from '@balena/jellyfish-plugin-base';
 import type { Contract } from '@balena/jellyfish-types/build/core';
-import combinatorics from 'js-combinatorics/commonjs/combinatorics';
+import * as Combinatorics from 'js-combinatorics/commonjs/combinatorics';
 import { v4 as uuidv4 } from 'uuid';
 import type { BackendTestContext } from '../types';
 
@@ -103,7 +101,7 @@ export class PermutationCombination {
 	[Symbol.iterator]() {
 		return (function* (it) {
 			for (let index = 1, l = it.length; index <= l; index++) {
-				yield* new combinatorics.Permutation(it, index);
+				yield* new Combinatorics.Permutation(it, index);
 			}
 		})(this.seed);
 	}
