@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v9.1.7
+## (2022-01-04)
+
+* Fix js-combinatorics import [Josh Bowling]
+
 # v9.1.6
 ## (2022-01-03)
 
