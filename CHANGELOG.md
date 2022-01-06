@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v9.1.11
+## (2022-01-06)
+
+* Remove backend resets [Josh Bowling]
+
 # v9.1.10
 ## (2022-01-06)
 
