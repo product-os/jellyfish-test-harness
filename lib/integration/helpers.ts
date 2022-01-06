@@ -170,7 +170,6 @@ export const before = async (
 
 	if (options.suffix) {
 		await kernel.initialize(logContext);
-		await kernel.reset(logContext);
 	}
 
 	const integrations = pluginManager.getSyncIntegrations(
