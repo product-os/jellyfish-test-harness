@@ -471,41 +471,9 @@ export async function after(context: TestContext): Promise<void> {
 /**
  * @summary Tasks to execute after each test
  * @function
- *
- * @param context - test context
  */
-export async function afterEach(context: TestContext): Promise<void> {
+export async function afterEach(): Promise<void> {
 	nock.cleanAll();
-	await module.exports.restore(context);
-}
-
-/**
- * @summary Restore the cards table to a clean state
- * @function
- *
- * @param context - test context
- *
- * TODO: Try and drop this entirely if possible
- */
-export async function restore(context: TestContext): Promise<void> {
-	await context.kernel.reset(context.logContext);
-	await context.kernel.backend.connection!.any(
-		'INSERT INTO cards SELECT * FROM cards_copy',
-	);
-}
-
-/**
- * @summary Save clean copy of cards table to restore later
- * @function
- *
- * @param context - test context
- *
- * TODO: Try and drop this entirely if possible
- */
-export async function save(context: TestContext): Promise<void> {
-	await context.kernel.backend.connection!.any(
-		'CREATE TABLE cards_copy AS TABLE cards',
-	);
 }
 
 /**
@@ -548,7 +516,6 @@ export async function run(tester: Tester, suite: TestSuite): Promise<void> {
 		if (suite.before) {
 			suite.before(context);
 		}
-		await save(context);
 	});
 
 	tester.beforeEach(async () => {
@@ -568,7 +535,7 @@ export async function run(tester: Tester, suite: TestSuite): Promise<void> {
 		if (suite.afterEach) {
 			suite.afterEach(context);
 		}
-		await afterEach(context);
+		await afterEach();
 	});
 
 	const stubOptions = {
