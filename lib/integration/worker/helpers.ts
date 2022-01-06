@@ -77,6 +77,10 @@ async function runBefore(options: SetupOptions): Promise<TestContext> {
 			if (consumedActionRequests.length > 0) {
 				return consumedActionRequests.shift() || null;
 			}
+
+			await new Promise((resolve) => {
+				setTimeout(resolve, 500);
+			});
 		}
 
 		return null;
