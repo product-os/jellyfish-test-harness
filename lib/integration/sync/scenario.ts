@@ -224,7 +224,7 @@ export async function webhookScenario(
 
 	// TODO: Remove once we fully support versioned
 	// slug references in the sync module.
-	if (head.type.includes('@')) {
+	if (!head.type.includes('@')) {
 		head.type = `${head.type}@1.0.0`;
 	}
 
@@ -433,7 +433,7 @@ export async function before(
 ): Promise<TestContext> {
 	const plugins = loadPlugins(pluginConstructors);
 	const context = await worker.before({
-		plugins,
+		plugins: pluginConstructors,
 		suffix: TRANSLATE_PREFIX,
 	});
 
