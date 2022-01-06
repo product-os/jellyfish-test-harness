@@ -37,10 +37,6 @@ export async function before(
 	);
 	await kernel.initialize(logContext);
 
-	if (options.suffix) {
-		await kernel.reset(logContext);
-	}
-
 	return {
 		cache,
 		logContext,
