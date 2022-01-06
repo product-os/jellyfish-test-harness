@@ -5,6 +5,12 @@
 
 # v1.0.1
 
+# v9.1.10
+## (2022-01-06)
+
+* Drop table save and restore [Josh Bowling]
+* Fix broken state [Josh Bowling]
+
 # v9.1.9
 ## (2022-01-05)
 
