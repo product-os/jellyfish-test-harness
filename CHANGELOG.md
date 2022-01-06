@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v9.2.0
+## (2022-01-06)
+
+* Export TestContext [Josh Bowling]
+
 # v9.1.11
 ## (2022-01-06)
 
