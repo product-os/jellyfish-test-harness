@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v9.2.2
+## (2022-01-07)
+
+* Get translate scenario runner working again [Josh Bowling]
+
 # v9.2.1
 ## (2022-01-06)
 
