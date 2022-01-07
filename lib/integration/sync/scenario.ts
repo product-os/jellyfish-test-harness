@@ -437,15 +437,6 @@ export async function before(
 		suffix: TRANSLATE_PREFIX,
 	});
 
-	/*
-	const syncContext = context.logContext.sync.getActionContext(
-		'test',
-		context.worker.getActionContext(context.logContext),
-		context.logContext,
-		context.session,
-	);
-	*/
-
 	await insertCards(context, context.session, plugins.cards, [
 		'external-event',
 		'action-integration-import-event',
@@ -459,21 +450,35 @@ export async function before(
 }
 
 /**
- * @summary Tasks to execute after a test suite
+ * @summary Restore the cards table to a clean state
  * @function
  *
  * @param context - test context
  */
-export async function after(context: TestContext): Promise<void> {
-	await worker.after(context);
+async function restore(context: TestContext) {
+	// TODO: Should avoid this level of manual manipulation of the backend
+	await context.kernel.reset(context.logContext);
+	await context.kernel.backend.connection!.any(
+		'INSERT INTO cards SELECT * FROM cards_copy',
+	);
+	await context.kernel.backend.connection!.any(
+		'INSERT INTO links2 SELECT * FROM links2_copy',
+	);
 }
 
 /**
- * @summary Tasks to execute after each test
+ * @summary Save a clean copy of cards table to restore later
  * @function
+ *
+ * @param context - test context
  */
-export async function afterEach(): Promise<void> {
-	nock.cleanAll();
+async function save(context: TestContext) {
+	await context.kernel.backend.connection!.any(
+		'CREATE TABLE cards_copy AS TABLE cards',
+	);
+	await context.kernel.backend.connection!.any(
+		'CREATE TABLE links2_copy AS TABLE links2',
+	);
 }
 
 /**
@@ -514,28 +519,30 @@ export async function run(tester: Tester, suite: TestSuite): Promise<void> {
 	tester.before(async () => {
 		context = await before(suite.plugins, suite.cards);
 		if (suite.before) {
-			suite.before(context);
+			await suite.before(context);
 		}
+		await save(context);
 	});
 
 	tester.beforeEach(async () => {
 		if (suite.beforeEach) {
-			suite.beforeEach(context);
+			await suite.beforeEach(context);
 		}
 	});
 
 	tester.after(async () => {
 		if (suite.after) {
-			suite.after(context);
+			await suite.after(context);
 		}
-		await after(context);
+		await worker.after(context);
 	});
 
 	tester.afterEach(async () => {
 		if (suite.afterEach) {
-			suite.afterEach(context);
+			await suite.afterEach(context);
 		}
-		await afterEach();
+		nock.cleanAll();
+		await restore(context);
 	});
 
 	const stubOptions = {
