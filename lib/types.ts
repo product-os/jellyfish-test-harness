@@ -100,10 +100,10 @@ export interface TestSuite {
 	source: string;
 	isAuthorized: any;
 	options?: TestSuiteOptions;
-	before?: (context: TestContext) => void;
-	beforeEach?: (context: TestContext) => void;
-	after?: (context: TestContext) => void;
-	afterEach?: (context: TestContext) => void;
+	before?: (context: TestContext) => Promise<void>;
+	beforeEach?: (context: TestContext) => Promise<void>;
+	after?: (context: TestContext) => Promise<void>;
+	afterEach?: (context: TestContext) => Promise<void>;
 	pre?: (context: TestContext) => void;
 	prepareEvent?: (event: any) => Promise<any>;
 }
