@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v9.2.3
+## (2022-01-07)
+
+* Update before/after function definitions [Josh Bowling]
+
 # v9.2.2
 ## (2022-01-07)
 
