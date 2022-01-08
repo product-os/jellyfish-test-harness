@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v9.2.4
+## (2022-01-08)
+
+* patch: Update external-non-major [Renovate Bot]
+
 # v9.2.3
 ## (2022-01-07)
 
