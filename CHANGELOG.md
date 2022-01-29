@@ -5,6 +5,11 @@
 
 # v1.0.1
 
+# v9.2.12
+## (2022-01-29)
+
+* Add deprecation notice to README [Josh Bowling]
+
 # v9.2.11
 ## (2022-01-11)
 
