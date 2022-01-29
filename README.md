@@ -1,3 +1,5 @@
+**Notice: This utility has been discontinued. Test utilities are now provided by the same modules that provide the functionality. See the test utilities exported by [`jellyfish-core`](https://github.com/product-os/jellyfish-core) and [`jellyfish-worker`](https://github.com/product-os/jellyfish-worker).**
+
 # Jellyfish Test Harness
 
 Test harness helpers for Jellyfish repos.
